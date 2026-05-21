@@ -1,0 +1,26 @@
+{
+  "name": "system-amb",
+  "version": "1.0.0",
+  "description": "sistema de ambulatório básico",
+  "homepage": "https://github.com/nathan-santoss/System-AMB#readme",
+  "bugs": {
+    "url": "https://github.com/nathan-santoss/System-AMB/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathan-santoss/System-AMB.git"
+  },
+  "license": "ISC",
+  "author": "nathan-santos",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.22.3",
+    "nodemon": "^3.1.14",
+    "sequelize": "^6.37.8"
+  }
+}
