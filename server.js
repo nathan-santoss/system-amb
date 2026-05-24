@@ -1,13 +1,3 @@
-import database from "./src/config/database.js"
-import Funcionario from "./src/models/funcionarios.js"
+import { SyncDB } from "./src/config/syncDB.js";
+SyncDB() // iniciar o servidor sincronizando o banco de dados 
 
-async function iniciarSys(params) {
-    try {
-        await database.sync()
-        console.log('BD sincronizado');
-    } catch (error) {
-        console.error('Erro ao sincronizar o banco de dados: ', error)
-    }    
-}
-
-iniciarSys()

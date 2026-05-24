@@ -35,3 +35,4 @@ database.authenticate().then(() => {
 })
 
 export default database
+
