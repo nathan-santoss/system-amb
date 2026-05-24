@@ -1,5 +1,5 @@
-import database from "./src/config/database.js";
-import { funcionario } from "./src/models/funcionarios.js";
+import database from "./src/config/database.js"
+import Funcionario from "./src/models/funcionarios.js"
 
 async function iniciarSys(params) {
     try {
