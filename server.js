@@ -3,6 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { SyncDB } from './src/config/syncDB.js'
+import funcionarioRoutes from './src/routes/funcionarioRoutes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -17,10 +18,12 @@ app.use(express.json())
 // Sincroniza banco de dados
 SyncDB()
 
-// Rota teste
+
+// Ligando as rotas
 app.get('/', (req, res) => {
     res.send('API do Sistema de Ambulatório está online!')
 })
+app.use(funcionarioRoutes)
 
 // Inicia servidor
 app.listen(PORT, () => {
