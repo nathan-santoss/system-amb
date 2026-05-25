@@ -30,14 +30,50 @@ export async function buscarFuncionarioPorMatricula(req, res) {
         const funcionario = await Funcionario.findByPk(matricula);
 
         // Se não encontrar nenhum funcionário com essa matrícula
-        if (!funcionario) {
-            return res.status(404).json({ erro: "Funcionário não encontrado." });
-        }
+        if (!funcionario) throw new Error('Funcionário não encontrado')
 
         res.status(200).json(funcionario);
 
     } catch (erro) {
         console.error("Erro ao buscar funcionário: ", erro);
-        res.status(500).json({ erro: "Erro ao tentar buscar o funcionário." });
+        res.status(500).json({ erro: `Erro ao tentar buscar o funcionário -> ${erro}` });
+    }
+}
+
+// atualizar dados de um funcionário
+export const atualizarFuncionario = async (req, res) => {
+    try {
+        const { matricula } = req.params
+        const dadosAtualizados = req.body
+
+        // Procura e atualiza os dados
+        const [atualizado] = await Funcionario.update(dadosAtualizados, {
+            where: { matricula: matricula }
+        })
+
+        if (!atualizado) throw new Error('Funcionário não encontrado')
+
+        res.status(200).json({ mensagem: "Funcionário atualizado com sucesso!" })
+
+    } catch (erro) {
+        res.status(500).json({ erro: `Erro ao atualizar funcionário -> ${erro}` })
+    }
+}
+
+// deletar um funcionário
+export const deletarFuncionario = async (req, res) => {
+    try {
+        const { matricula } = req.params
+
+        const deletado = await Funcionario.destroy({
+            where: { matricula: matricula }
+        })
+
+        if (!deletado) throw new Error('Funcionário não encontrado')
+
+        res.status(200).json({ mensagem: "Funcionário removido com sucesso!" })
+
+    } catch (erro) {
+        res.status(500).json({ erro: `Erro ao deletar funcionário -> ${erro}` })
     }
 }
