@@ -6,7 +6,11 @@ const dbHost = process.env.DB_HOST;
 const dbUsuario = process.env.DB_USER;
 const dbSenha = process.env.DB_PASS;
 const dbNome = process.env.DB_NAME;
-const dbPort = process.env.DB_PORT
+// adaptação para o servidor do SENAC: 
+const dbPort = Number(process.env.DB_PORT) || 3306
+
+//configuração original:
+// const dbPort = process.env.DB_PORT
 
 const conexaoSQL = await mysql.createConnection({
     host: dbHost,
