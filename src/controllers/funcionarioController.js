@@ -1,4 +1,4 @@
-import Funcionario from `../models/funcionarios.js`
+import Funcionario from '../models/funcionarios.js'
 
 // cadastrar funcionário
 export async function cadastrarFuncionario(req, res) {
@@ -33,18 +33,14 @@ export async function atualizarFuncionario(req, res) {
             where: { matricula: matricula }
         })
 
-        if (!atualizado) {
-            throw new Error(`Funcionário não encontrado`)
-        }
+        if (!atualizado) throw new Error(`Funcionário não encontrado`)
 
         res.status(200).json({
             mensagem: `Funcionário atualizado com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
@@ -57,17 +53,13 @@ export async function deletarFuncionario(req, res) {
             where: { matricula: matricula }
         })
 
-        if (!deletado) {
-            throw new Error(`Funcionário não encontrado`)
-        }
+        if (!deletado) throw new Error(`Funcionário não encontrado`)
 
         res.status(200).json({
             mensagem: `Funcionário removido com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }

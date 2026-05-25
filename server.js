@@ -1,14 +1,14 @@
-import express from `express`
-import path from `path`
-import { fileURLToPath } from `url`
+import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-import { SyncDB } from `./src/config/syncDB.js`
+import { SyncDB } from './src/config/syncDB.js'
 
 // importando rotas
-import funcionarioRoutes from `./src/routes/funcionarioRoutes.js`
-import alergiaRoutes from `./src/routes/alergiaRoutes.js`
-import atendimentoRoutes from `./src/routes/atendimentoRoutes.js`
-import atestadoRoutes from `./src/routes/atestadoRoutes.js`
+import funcionarioRoutes from './src/routes/funcionarioRoutes.js'
+import alergiaRoutes from './src/routes/alergiaRoutes.js'
+import atendimentoRoutes from './src/routes/atendimentoRoutes.js'
+import atestadoRoutes from './src/routes/atestadoRoutes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 
 // rota teste
-app.get(`/`, (req, res) => {
+app.get('/', (req, res) => {
     res.send(`API do Sistema de Ambulatório está online!`)
 })
 

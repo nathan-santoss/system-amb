@@ -1,16 +1,15 @@
-import express from `express`
+import express from 'express'
 
 import {
     registrarAtendimento,
     buscarAtendimentosPorFuncionario,
     atualizarAtendimento,
     deletarAtendimento
-} from `../controllers/atendimentoController.js`
+} from '../controllers/atendimentoController.js'
 
 const router = express.Router()
 
 router.post(`/atendimentos`, registrarAtendimento)
-
 router.get(`/atendimentos/:matricula`, buscarAtendimentosPorFuncionario)
 
 router.put(`/atendimentos/:id`, atualizarAtendimento)

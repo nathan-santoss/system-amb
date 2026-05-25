@@ -1,4 +1,4 @@
-import Atendimento from `../models/atendimento.js`
+import Atendimento from '../models/atendimento.js'
 
 // registrar atendimento
 export async function registrarAtendimento(req, res) {
@@ -37,18 +37,14 @@ export async function atualizarAtendimento(req, res) {
             where: { id_atendimento: id }
         })
 
-        if (!atualizado) {
-            throw new Error(`Atendimento não encontrado`)
-        }
+        if (!atualizado) throw new Error(`Atendimento não encontrado`)
 
         res.status(200).json({
             mensagem: `Atendimento atualizado com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
@@ -61,17 +57,13 @@ export async function deletarAtendimento(req, res) {
             where: { id_atendimento: id }
         })
 
-        if (!deletado) {
-            throw new Error(`Atendimento não encontrado`)
-        }
+        if (!deletado) throw new Error(`Atendimento não encontrado`)
 
         res.status(200).json({
             mensagem: `Atendimento removido com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }

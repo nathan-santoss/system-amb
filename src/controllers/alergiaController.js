@@ -1,4 +1,4 @@
-import Alergia from `../models/alergias.js`
+import Alergia from '../models/alergias.js'
 
 // cadastrar alergia
 export async function cadastrarAlergia(req, res) {
@@ -37,18 +37,14 @@ export async function atualizarAlergia(req, res) {
             where: { id_alergia: id }
         })
 
-        if (!atualizado) {
-            throw new Error(`Alergia não encontrada`)
-        }
+        if (!atualizado) throw new Error(`Alergia não encontrada`)
 
         res.status(200).json({
             mensagem: `Alergia atualizada com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
@@ -61,17 +57,13 @@ export async function deletarAlergia(req, res) {
             where: { id_alergia: id }
         })
 
-        if (!deletado) {
-            throw new Error(`Alergia não encontrada`)
-        }
+        if (!deletado) throw new Error(`Alergia não encontrada`)
 
         res.status(200).json({
             mensagem: `Alergia removida com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }

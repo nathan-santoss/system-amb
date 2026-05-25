@@ -1,4 +1,4 @@
-import Atestado from `../models/atestados.js`
+import Atestado from '../models/atestados.js'
 
 // emitir atestado
 export async function emitirAtestado(req, res) {
@@ -37,18 +37,14 @@ export async function atualizarAtestado(req, res) {
             where: { id_atestado: id }
         })
 
-        if (!atualizado) {
-            throw new Error(`Atestado não encontrado`)
-        }
+        if (!atualizado) throw new Error(`Atestado não encontrado`)
 
         res.status(200).json({
             mensagem: `Atestado atualizado com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
@@ -61,17 +57,13 @@ export async function deletarAtestado(req, res) {
             where: { id_atestado: id }
         })
 
-        if (!deletado) {
-            throw new Error(`Atestado não encontrado`)
-        }
+        if (!deletado) throw new Error(`Atestado não encontrado`)
 
         res.status(200).json({
             mensagem: `Atestado removido com sucesso`
         })
 
     } catch (erro) {
-        res.status(500).json({
-            erro: erro.message
-        })
+        res.status(500).json({ erro: erro.message })
     }
 }
