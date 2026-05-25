@@ -1,67 +1,55 @@
-import Funcionario from "../models/funcionarios.js";
+import Funcionario from `../models/funcionarios.js`
 
+// cadastrar funcionário
 export async function cadastrarFuncionario(req, res) {
     try {
-        const { matricula, nome, cpf, cargo, setor } = req.body
-        const novoFunc = await Funcionario.create({
-            matricula,
-            nome,
-            cpf,
-            cargo,
-            setor
-        })
-        res.status(201).json({
-            mensagem: "Funcionário cadastrado com sucesso!",
-            funcionario: novoFunc
-        })
-    } catch (error) {
-        console.error("Erro ao cadastrar funcionário: ", erro);
-        res.status(500).json({ erro: "Erro ao tentar cadastrar o funcionário." });
-    }
+        const novoFuncionario = await Funcionario.create(req.body)
 
-}
-
-// buscar um funcionário pela matrícula
-export async function buscarFuncionarioPorMatricula(req, res) {
-    try {
-        const { matricula } = req.params;
-
-        // Procura no MySQL 
-        const funcionario = await Funcionario.findByPk(matricula);
-
-        // Se não encontrar nenhum funcionário com essa matrícula
-        if (!funcionario) throw new Error('Funcionário não encontrado')
-
-        res.status(200).json(funcionario);
+        res.status(201).json(novoFuncionario)
 
     } catch (erro) {
-        console.error("Erro ao buscar funcionário: ", erro);
-        res.status(500).json({ erro: `Erro ao tentar buscar o funcionário -> ${erro}` });
+        res.status(500).json({ erro: erro.message })
     }
 }
 
-// atualizar dados de um funcionário
-export const atualizarFuncionario = async (req, res) => {
+// buscar funcionários
+export async function buscarFuncionarios(req, res) {
+    try {
+        const funcionarios = await Funcionario.findAll()
+
+        res.status(200).json(funcionarios)
+
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message })
+    }
+}
+
+// atualizar funcionário
+export async function atualizarFuncionario(req, res) {
     try {
         const { matricula } = req.params
-        const dadosAtualizados = req.body
 
-        // Procura e atualiza os dados
-        const [atualizado] = await Funcionario.update(dadosAtualizados, {
+        const [atualizado] = await Funcionario.update(req.body, {
             where: { matricula: matricula }
         })
 
-        if (!atualizado) throw new Error('Funcionário não encontrado')
+        if (!atualizado) {
+            throw new Error(`Funcionário não encontrado`)
+        }
 
-        res.status(200).json({ mensagem: "Funcionário atualizado com sucesso!" })
+        res.status(200).json({
+            mensagem: `Funcionário atualizado com sucesso`
+        })
 
     } catch (erro) {
-        res.status(500).json({ erro: `Erro ao atualizar funcionário -> ${erro}` })
+        res.status(500).json({
+            erro: erro.message
+        })
     }
 }
 
-// deletar um funcionário
-export const deletarFuncionario = async (req, res) => {
+// deletar funcionário
+export async function deletarFuncionario(req, res) {
     try {
         const { matricula } = req.params
 
@@ -69,11 +57,17 @@ export const deletarFuncionario = async (req, res) => {
             where: { matricula: matricula }
         })
 
-        if (!deletado) throw new Error('Funcionário não encontrado')
+        if (!deletado) {
+            throw new Error(`Funcionário não encontrado`)
+        }
 
-        res.status(200).json({ mensagem: "Funcionário removido com sucesso!" })
+        res.status(200).json({
+            mensagem: `Funcionário removido com sucesso`
+        })
 
     } catch (erro) {
-        res.status(500).json({ erro: `Erro ao deletar funcionário -> ${erro}` })
+        res.status(500).json({
+            erro: erro.message
+        })
     }
 }

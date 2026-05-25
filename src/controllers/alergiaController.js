@@ -1,45 +1,77 @@
-import Alergia from '../models/alergias.js'
+import Alergia from `../models/alergias.js`
 
-export const cadastrarAlergia = async (req, res) => {
+// cadastrar alergia
+export async function cadastrarAlergia(req, res) {
     try {
-        const { nome_alergia, descricao_alergia, funcionario_matricula } = req.body
+        const novaAlergia = await Alergia.create(req.body)
 
-        const novaAlergia = await Alergia.create({
-            nome_alergia,
-            descricao_alergia,
-            funcionario_matricula
-        })
-
-        res.status(201).json({
-            mensagem: "Alergia cadastrada com sucesso!",
-            alergia: novaAlergia
-        })
+        res.status(201).json(novaAlergia)
 
     } catch (erro) {
-        console.error("Erro ao cadastrar alergia: ", erro)
-        res.status(500).json({ erro: "Erro ao tentar cadastrar a alergia." })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
-export const buscarAlergiasPorFuncionario = async (req, res) => {
+// buscar alergias por funcionário
+export async function buscarAlergiasPorFuncionario(req, res) {
     try {
-        // Captura a matrícula vinda da URL
         const { matricula } = req.params
 
-        // Procura todas as alergias associadas a esta matrícula (findAll)
         const alergias = await Alergia.findAll({
             where: { funcionario_matricula: matricula }
         })
-        if (alergias.length > 0) {
-            // Retorna a lista de alergias encontrada
-            res.status(200).json(alergias)
-            return
-        }
-        throw new Error("Sem alergias encontradas");
 
+        res.status(200).json(alergias)
 
     } catch (erro) {
-        console.error("Erro ao buscar alergias: ", erro)
-        res.status(500).json({ erro: "Erro ao tentar buscar as alergias/funcionário não possui" })
+        res.status(500).json({ erro: erro.message })
+    }
+}
+
+// atualizar alergia
+export async function atualizarAlergia(req, res) {
+    try {
+        const { id } = req.params
+
+        const [atualizado] = await Alergia.update(req.body, {
+            where: { id_alergia: id }
+        })
+
+        if (!atualizado) {
+            throw new Error(`Alergia não encontrada`)
+        }
+
+        res.status(200).json({
+            mensagem: `Alergia atualizada com sucesso`
+        })
+
+    } catch (erro) {
+        res.status(500).json({
+            erro: erro.message
+        })
+    }
+}
+
+// deletar alergia
+export async function deletarAlergia(req, res) {
+    try {
+        const { id } = req.params
+
+        const deletado = await Alergia.destroy({
+            where: { id_alergia: id }
+        })
+
+        if (!deletado) {
+            throw new Error(`Alergia não encontrada`)
+        }
+
+        res.status(200).json({
+            mensagem: `Alergia removida com sucesso`
+        })
+
+    } catch (erro) {
+        res.status(500).json({
+            erro: erro.message
+        })
     }
 }

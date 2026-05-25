@@ -1,54 +1,77 @@
-import Atestado from '../models/atestados.js'
+import Atestado from `../models/atestados.js`
 
-// Função responsável por emitir/registrar um novo atestado
-export const emitirAtestado = async (req, res) => {
+// emitir atestado
+export async function emitirAtestado(req, res) {
     try {
-        const {
-            data_emissao,
-            tipo_afastamento,
-            motivo,
-            quantidade,
-            caminho_anexo,
-            funcionario_matricula
-        } = req.body
+        const novoAtestado = await Atestado.create(req.body)
 
-        const novoAtestado = await Atestado.create({
-            data_emissao,
-            tipo_afastamento,
-            motivo,
-            quantidade,
-            caminho_anexo,
-            funcionario_matricula
-        })
-
-        res.status(201).json({
-            mensagem: "Atestado emitido com sucesso!",
-            atestado: novoAtestado
-        })
+        res.status(201).json(novoAtestado)
 
     } catch (erro) {
-        console.error("Erro ao emitir atestado: ", erro)
-        res.status(500).json({ erro: "Erro ao tentar emitir o atestado." })
+        res.status(500).json({ erro: erro.message })
     }
 }
 
-export const buscarAtestadosPorFuncionario = async (req, res) => {
+// buscar atestados por funcionário
+export async function buscarAtestadosPorFuncionario(req, res) {
     try {
         const { matricula } = req.params
 
-        // Busca todos os atestados daquela matrícula
-        // Ordenamos por 'data_emissao' para mostrar os mais recentes primeiro
-        const historicoAtestados = await Atestado.findAll({
-            where: { funcionario_matricula: matricula },
-            order: [['data_emissao', 'DESC']]
+        const atestados = await Atestado.findAll({
+            where: { funcionario_matricula: matricula }
         })
 
-        if (historicoAtestados.length === 0) throw new Error('Erro ao buscar atestados -> Não encontrado registros.')
-            
-        res.status(200).json(historicoAtestados)
+        res.status(200).json(atestados)
 
     } catch (erro) {
-        console.error("Erro ao buscar histórico de atestados: ", erro)
-        res.status(500).json({ erro: "Erro ao tentar buscar o histórico de atestados." })
+        res.status(500).json({ erro: erro.message })
+    }
+}
+
+// atualizar atestado
+export async function atualizarAtestado(req, res) {
+    try {
+        const { id } = req.params
+
+        const [atualizado] = await Atestado.update(req.body, {
+            where: { id_atestado: id }
+        })
+
+        if (!atualizado) {
+            throw new Error(`Atestado não encontrado`)
+        }
+
+        res.status(200).json({
+            mensagem: `Atestado atualizado com sucesso`
+        })
+
+    } catch (erro) {
+        res.status(500).json({
+            erro: erro.message
+        })
+    }
+}
+
+// deletar atestado
+export async function deletarAtestado(req, res) {
+    try {
+        const { id } = req.params
+
+        const deletado = await Atestado.destroy({
+            where: { id_atestado: id }
+        })
+
+        if (!deletado) {
+            throw new Error(`Atestado não encontrado`)
+        }
+
+        res.status(200).json({
+            mensagem: `Atestado removido com sucesso`
+        })
+
+    } catch (erro) {
+        res.status(500).json({
+            erro: erro.message
+        })
     }
 }
