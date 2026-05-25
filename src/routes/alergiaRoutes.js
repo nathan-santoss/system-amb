@@ -1,14 +1,21 @@
-import express from 'express'
-import { cadastrarAlergia, buscarAlergiasPorFuncionario, atualizarAlergia} from '../controllers/alergiaController.js'
+import express from `express`
+
+import {
+    cadastrarAlergia,
+    buscarAlergiasPorFuncionario,
+    atualizarAlergia,
+    deletarAlergia
+} from `../controllers/alergiaController.js`
 
 const router = express.Router()
 
-// cadastro e busca de alergias
-router.post('/alergias', cadastrarAlergia)
+router.post(`/alergias`, cadastrarAlergia)
 
-router.patch('/alergias/:id', atualizarAlergia)
+router.get(`/alergias/:matricula`, buscarAlergiasPorFuncionario)
 
-router.get('/alergias/:matricula', buscarAlergiasPorFuncionario)
-    
+router.put(`/alergias/:id`, atualizarAlergia)
+router.patch(`/alergias/:id`, atualizarAlergia)
+
+router.delete(`/alergias/:id`, deletarAlergia)
 
 export default router

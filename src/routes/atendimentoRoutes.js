@@ -1,9 +1,21 @@
-import express from 'express'
-import { registrarAtendimento, buscarAtendimentosPorFuncionario  } from '../controllers/atendimentoController.js'
+import express from `express`
+
+import {
+    registrarAtendimento,
+    buscarAtendimentosPorFuncionario,
+    atualizarAtendimento,
+    deletarAtendimento
+} from `../controllers/atendimentoController.js`
 
 const router = express.Router()
 
-router.post('/atendimentos', registrarAtendimento)
-router.get('/atendimentos/:matricula', buscarAtendimentosPorFuncionario)
+router.post(`/atendimentos`, registrarAtendimento)
+
+router.get(`/atendimentos/:matricula`, buscarAtendimentosPorFuncionario)
+
+router.put(`/atendimentos/:id`, atualizarAtendimento)
+router.patch(`/atendimentos/:id`, atualizarAtendimento)
+
+router.delete(`/atendimentos/:id`, deletarAtendimento)
 
 export default router
