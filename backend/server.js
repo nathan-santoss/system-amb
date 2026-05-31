@@ -26,18 +26,16 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 // rota inicial
-// app.get('/', (req, res) => {
-//     res.redirect('/painel')
-// })
+// rota inicial
 app.get('/', (req, res) => {
-    res.send('API está online!')
+    res.redirect('/painel')
 })
 
-// app.get('/painel', (req, res) => {
-//     res.render('painel', {
-//         tituloPagina: 'Painel'
-//     })
-// })
+app.get('/painel', (req, res) => {
+    res.render('painel', {
+        tituloPagina: 'Painel'
+    })
+})
 
 // ativando rotas
 app.use(funcionarioRoutes)
