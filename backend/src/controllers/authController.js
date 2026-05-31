@@ -1,4 +1,4 @@
-import Usuario from "../models/usuarios"
+import Usuario from "../models/usuarios.js"
 import bcrypt from 'bcrypt'
 
 export const cadastrar = async (req, res) => {
