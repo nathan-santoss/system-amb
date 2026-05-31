@@ -7,13 +7,14 @@ import Funcionario from './src/models/funcionarios.js';
 import Atendimento from './src/models/atendimento.js';
 import Alergia from './src/models/alergias.js';
 import Atestado from './src/models/atestados.js';
+import Usuario from './src/models/usuarios.js';
 
 // Importação das Rotas
 import funcionarioRoutes from './src/routes/funcionarioRoutes.js';
 import atendimentoRoutes from './src/routes/atendimentoRoutes.js';
 import alergiaRoutes from './src/routes/alergiaRoutes.js';
 import atestadoRoutes from './src/routes/atestadoRoutes.js';
-import Usuario from './src/models/usuarios.js';
+import authRoutes from './src/routes/authRoutes.js'
 
 const app = express();
 
@@ -24,10 +25,11 @@ app.use(cors());
 app.use(express.json());
 
 // 3. Nossas Rotas da API
-app.use('/funcionarios', funcionarioRoutes);
-app.use('/atendimentos', atendimentoRoutes);
-app.use('/alergias', alergiaRoutes);
-app.use('/atestados', atestadoRoutes);
+app.use(funcionarioRoutes);
+app.use(atendimentoRoutes);
+app.use(alergiaRoutes);
+app.use(atestadoRoutes);
+app.use(authRoutes)
 
 // Rota Inicial (Agora ela apenas devolve um JSON dizendo que está viva)
 app.get('/', (req, res) => {
