@@ -1,0 +1,152 @@
+/* --- Estilos Globais e Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-shadow: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* --- Cabeçalho Principal --- */
+.cabecalho-principal {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Container e Seções --- */
+.conteudo-principal {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.secao-apresentacao {
+    margin-bottom: 25px;
+}
+
+.secao-apresentacao h2 {
+    color: #222;
+    margin-bottom: 5px;
+}
+
+.secao-apresentacao p {
+    color: #666;
+}
+
+/* --- Grid de Cards de Status --- */
+.secao-cards-status {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.card-status {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    border-left: 5px solid #ccc;
+}
+
+/* Cores das bordas dos cards baseadas na semântica médica */
+.secao-cards-status .card-status:nth-child(1) { border-left-color: #ffc107; } /* Pendentes: Amarelo */
+.secao-cards-status .card-status:nth-child(2) { border-left-color: #17a2b8; } /* Observação: Azul */
+.secao-cards-status .card-status:nth-child(3) { border-left-color: #28a745; } /* Concluídos: Verde */
+
+.titulo-status {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.card-status strong {
+    font-size: 32px;
+    color: #222;
+    margin-top: 5px;
+}
+
+/* --- Tabela de Monitorização --- */
+.secao-atendimentos-recentes {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.secao-atendimentos-recentes h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #222;
+}
+
+.tabela-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+}
+
+/* --- Badges de Status (Controlados pelas classes dinâmicas do React) --- */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-em-observação {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-concluido {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* --- Botão de Ação --- */
+.btn-visualizar {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-visualizar:hover {
+    background-color: #0056b3;
+}

@@ -1,52 +1,46 @@
-import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import express from 'express';
+import cors from 'cors';
+import database from './src/config/database.js';
 
-import { SyncDB } from './src/config/syncDB.js'
+// Importação dos Modelos
+import Funcionario from './src/models/funcionarios.js';
+import Atendimento from './src/models/atendimento.js';
+import Alergia from './src/models/alergias.js';
+import Atestado from './src/models/atestados.js';
 
-// importando rotas
-import funcionarioRoutes from './src/routes/funcionarioRoutes.js'
-import alergiaRoutes from './src/routes/alergiaRoutes.js'
-import atendimentoRoutes from './src/routes/atendimentoRoutes.js'
-import atestadoRoutes from './src/routes/atestadoRoutes.js'
+// Importação das Rotas
+import funcionarioRoutes from './src/routes/funcionarioRoutes.js';
+import atendimentoRoutes from './src/routes/atendimentoRoutes.js';
+import alergiaRoutes from './src/routes/alergiaRoutes.js';
+import atestadoRoutes from './src/routes/atestadoRoutes.js';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const app = express();
 
-// inicializa express
-const app = express()
-const PORT = process.env.PORT || 3000
+// Libera a porta para o React conversar com o Node (CORS)
+app.use(cors());
 
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'public/pages'))
+// Configura o Express para ler e enviar JSON
+app.use(express.json());
 
-// middleware json
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
+// 3. Nossas Rotas da API
+app.use('/funcionarios', funcionarioRoutes);
+app.use('/atendimentos', atendimentoRoutes);
+app.use('/alergias', alergiaRoutes);
+app.use('/atestados', atestadoRoutes);
 
-// rota inicial
-// rota inicial
+// Rota Inicial (Agora ela apenas devolve um JSON dizendo que está viva)
 app.get('/', (req, res) => {
-    res.redirect('/painel')
-})
+    res.json({ status: "Online", mensagem: "API do Ambulatório rodando perfeitamente!" });
+});
 
-app.get('/painel', (req, res) => {
-    res.render('painel', {
-        tituloPagina: 'Painel'
+// Conecta no Banco e Liga o Servidor
+database.sync()
+    .then(() => {
+        console.log("Banco de dados sincronizado!");
+        app.listen(3000, () => {
+            console.log("Servidor Back-end rodando na porta 3000");
+        });
     })
-})
-
-// ativando rotas
-app.use(funcionarioRoutes)
-app.use(alergiaRoutes)
-app.use(atendimentoRoutes)
-app.use(atestadoRoutes)
-
-// sincroniza banco
-SyncDB()
-
-// inicia servidor
-app.listen(PORT, () => {
-    console.log(`==== Servidor Express rodando na porta ${PORT} ====`)
-})
+    .catch((erro) => {
+        console.error("Erro ao sincronizar o banco:", erro);
+    });
