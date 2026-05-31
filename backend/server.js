@@ -13,6 +13,7 @@ import funcionarioRoutes from './src/routes/funcionarioRoutes.js';
 import atendimentoRoutes from './src/routes/atendimentoRoutes.js';
 import alergiaRoutes from './src/routes/alergiaRoutes.js';
 import atestadoRoutes from './src/routes/atestadoRoutes.js';
+import Usuario from './src/models/usuarios.js';
 
 const app = express();
 
