@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import CardsStatus from '../components/CardsStatus'
+import '../styles/global.css'
 
 function Dashboard() {
     const [atendimentos, setAtendimentos] = useState([])
@@ -22,7 +23,6 @@ function Dashboard() {
                 console.error("Ocorreu um erro ao comunicar com o Backend:", erro)
             }
         }
-
         buscarDadosDaAPI()
     }, [])
 
@@ -36,27 +36,30 @@ function Dashboard() {
         }
 
         return atendimentos.map(paciente => {
-            let matricula = paciente.matricula
-
-            if (!matricula) {
-                matricula = 'Sem matrícula'
-            }
+            // Converte status para classe CSS (ex: "Em Observação" vira "badge-em-observacao")
+            const statusClass = paciente.status.toLowerCase().replace(' ', '-')
 
             return (
                 <tr key={paciente.id}>
-                    <td>{matricula}</td>
-                    <td>{paciente.status}</td>
+                    <td>{paciente.matricula || 'Sem matrícula'}</td>
+                    <td>
+                        <span className={`badge badge-${statusClass}`}>
+                            {paciente.status}
+                        </span>
+                    </td>
                 </tr>
             )
         })
     }
 
     return (
-        <main className="conteudo-principal">
-            <section className="secao-apresentacao">
-                <h2>Painel do Ambulatório</h2>
-                <p>Controle geral de atendimentos, triagens e funcionários.</p>
-            </section>
+        <main className="dashboard-container">
+            <header className="header-dashboard">
+                <div>
+                    <h1>Painel do Ambulatório</h1>
+                    <p>Controle geral de atendimentos, triagens e funcionários.</p>
+                </div>
+            </header>
 
             <CardsStatus
                 pendentes={metricas.pendentes}
@@ -64,23 +67,19 @@ function Dashboard() {
                 concluidos={metricas.concluidos}
             />
 
-            <section className="secao-atendimentos-recentes">
+            <section className="card">
                 <h2>Fila de Atendimento Atual</h2>
-
-                <div className="tabela-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Matrícula</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {montarLinhasDaTabela()}
-                        </tbody>
-                    </table>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {montarLinhasDaTabela()}
+                    </tbody>
+                </table>
             </section>
         </main>
     )

@@ -1,30 +1,23 @@
+// frontend/src/components/CardsStatus.jsx
+import '../styles/global.css'
 
-// 2. A FUNÇÃO DO COMPONENTE: Ela recebe "props" (propriedades). 
-// É como dizer: "Ei card, quando você for desenhado, tome esses 3 números para mostrar".
-function CardsStatus({ pendentes = 0, observacao = 0, concluidos = 0 }) {
-
-    // 3. O RETORNO (O Visual): Aqui escrevemos JSX (que é o HTML misturado com JS).
-    // Note que em vez de 'class', no React usamos 'className'.
-    // Para injetar os números do JavaScript no HTML, usamos chaves { }.
+function CardsStatus() {
     return (
-        <section className="secao-cards-status">
-            <div className="card-status">
-                <span className="titulo-status">Pendentes</span>
-                <strong>{pendentes}</strong>
+        <div style={{ display: 'flex', gap: '20px' }}>
+            <div className="card" style={{ flex: 1 }}>
+                <h3>Em Atendimento</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>5</p>
             </div>
-
-            <div className="card-status">
-                <span className="titulo-status">Em Observação</span>
-                <strong>{observacao}</strong>
+            <div className="card" style={{ flex: 1 }}>
+                <h3>Aguardando Triagem</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>12</p>
             </div>
-
-            <div className="card-status">
-                <span className="titulo-status">Concluídos</span>
-                <strong>{concluidos}</strong>
+            <div className="card" style={{ flex: 1 }}>
+                <h3>Atestados Emitidos</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>3</p>
             </div>
-        </section>
+        </div>
     )
 }
 
-// 4. EXPORTAÇÃO: Isso permite que outros arquivos "puxem" esse bloco de código.
 export default CardsStatus

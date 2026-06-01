@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+
 function Login({ onLoginSuccess }) {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
@@ -8,6 +9,7 @@ function Login({ onLoginSuccess }) {
         e.preventDefault()
 
         try {
+
             const resposta = await fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -16,8 +18,10 @@ function Login({ onLoginSuccess }) {
 
             const dados = await resposta.json()
 
+
             if (resposta.ok) {
                 alert("Login realizado com sucesso!")
+
 
                 if (onLoginSuccess) {
                     onLoginSuccess()
@@ -35,7 +39,6 @@ function Login({ onLoginSuccess }) {
         <div className="login-container">
             <form onSubmit={handleSubmit}>
                 <h2>Login de Acesso</h2>
-
                 <input
                     type="email"
                     placeholder="Email"
@@ -43,7 +46,6 @@ function Login({ onLoginSuccess }) {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-
                 <input
                     type="password"
                     placeholder="Senha"
@@ -51,7 +53,6 @@ function Login({ onLoginSuccess }) {
                     onChange={(e) => setSenha(e.target.value)}
                     required
                 />
-
                 <button type="submit">Entrar</button>
             </form>
         </div>
