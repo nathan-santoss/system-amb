@@ -1,20 +1,21 @@
-// frontend/src/components/CardsStatus.jsx
 import '../styles/global.css'
 
-function CardsStatus() {
+function CardsStatus({ pendentes, observacao, concluidos }) {
     return (
-        <div style={{ display: 'flex', gap: '20px' }}>
-            <div className="card" style={{ flex: 1 }}>
-                <h3>Em Atendimento</h3>
-                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>5</p>
+        <div className="cards-container">
+            <div className="card">
+                <h3>Pendentes</h3>
+                <p className="card-valor">{pendentes}</p>
             </div>
-            <div className="card" style={{ flex: 1 }}>
-                <h3>Aguardando Triagem</h3>
-                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>12</p>
+
+            <div className="card">
+                <h3>Em Observação</h3>
+                <p className="card-valor">{observacao}</p>
             </div>
-            <div className="card" style={{ flex: 1 }}>
-                <h3>Atestados Emitidos</h3>
-                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>3</p>
+
+            <div className="card">
+                <h3>Concluídos</h3>
+                <p className="card-valor">{concluidos}</p>
             </div>
         </div>
     )
