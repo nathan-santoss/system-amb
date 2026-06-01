@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import CardsStatus from '../components/CardsStatus'
+import CardsStatus from '../components/CardsStatus.jsx'
 import '../styles/global.css'
 
 function Dashboard() {
