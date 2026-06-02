@@ -4,7 +4,8 @@ import {
     registrarAtendimento,
     buscarAtendimentosPorFuncionario,
     atualizarAtendimento,
-    deletarAtendimento
+    deletarAtendimento,
+    searchAll
 } from '../controllers/atendimentoController.js'
 
 const router = express.Router()
@@ -17,4 +18,7 @@ router.patch(`/atendimentos/:id`, atualizarAtendimento)
 
 router.delete(`/atendimentos/:id`, deletarAtendimento)
 
+
+// buscar todos atendimentos
+router.get('/buscarAtendimentos', searchAll())
 export default router
