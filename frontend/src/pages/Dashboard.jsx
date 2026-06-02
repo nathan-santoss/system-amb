@@ -9,7 +9,7 @@ function Dashboard() {
     useEffect(() => {
         async function buscarDadosDaAPI() {
             try {
-                const resposta = await fetch('http://localhost:3000/atendimentos')
+                const resposta = await fetch('http://localhost:3000/buscarAtendimentos')
                 const dadosQueVieramDoBanco = await resposta.json()
 
                 setAtendimentos(dadosQueVieramDoBanco)
