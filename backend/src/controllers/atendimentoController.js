@@ -67,3 +67,13 @@ export async function deletarAtendimento(req, res) {
         res.status(500).json({ erro: erro.message })
     }
 }
+
+// buscar todos atendimentos
+export const searchAll = async (req, res) => {
+    try {
+        const todosAtendimentos = await Atendimento.findAll()
+        res.status(200).json(todosAtendimentos) // encontrou os atendimentos e retorna
+    } catch (error) {
+        res.status(500).json({ erro: error.message })
+    }
+}
