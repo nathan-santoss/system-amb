@@ -6,15 +6,16 @@ import {
     atualizarAlergia,
     deletarAlergia
 } from '../controllers/alergiaController.js'
+import { verificarToken } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.post('/alergias', cadastrarAlergia)
+router.post('/alergias', verificarToken, cadastrarAlergia)
 router.get('/alergias/:matricula', buscarAlergiasPorFuncionario)
 
-router.put('/alergias/:id', atualizarAlergia)
-router.patch('/alergias/:id', atualizarAlergia)
+router.put('/alergias/:id', verificarToken, atualizarAlergia)
+router.patch('/alergias/:id', verificarToken, atualizarAlergia)
 
-router.delete('/alergias/:id', deletarAlergia)
+router.delete('/alergias/:id', verificarToken, deletarAlergia)
 
 export default router
