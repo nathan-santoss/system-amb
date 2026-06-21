@@ -1,5 +1,7 @@
 import Usuario from "../models/usuarios.js"
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
 
 export const cadastrar = async (req, res) => {
     const {email, senha} = req.body
@@ -34,7 +36,16 @@ export const login = async (req, res) => {
 
         if(!senhaCorreta) return res.status(401).json({message: "Senha incorreta"})
         
-        res.status(200).json({ message: "Login realizado com sucesso!" })
+        const token = jwt.sign(
+            {id: usuario.id, email: usuario.email},
+            process.env.JWT_SECRET,
+            {expiresIn: '2h'}
+        )
+        
+        res.status(200).json({ 
+            message: "Login realizado com sucesso!",
+            token: token
+        })
 
     } catch (error) {
         res.status(500).json({ error: `Erro ao fazer login: ${error.message}`})
