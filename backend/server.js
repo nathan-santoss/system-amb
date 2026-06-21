@@ -24,14 +24,14 @@ app.use(cors());
 // Configura o Express para ler e enviar JSON
 app.use(express.json());
 
-// 3. Nossas Rotas da API
+//Rotas da API
 app.use(funcionarioRoutes);
 app.use(atendimentoRoutes);
 app.use(alergiaRoutes);
 app.use(atestadoRoutes);
 app.use(authRoutes)
 
-// Rota Inicial (Agora ela apenas devolve um JSON dizendo que está viva)
+// Rota Inicial (devolve um JSON)
 app.get('/', (req, res) => {
     res.json({ status: "Online", mensagem: "API do Ambulatório rodando perfeitamente!" });
 });

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import '../styles/global.css'
 
 
 function Login({ onLoginSuccess }) {

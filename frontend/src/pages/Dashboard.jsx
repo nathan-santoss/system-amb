@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import CardsStatus from '../components/CardsStatus'
+import CardsStatus from '../components/CardsStatus.jsx'
 import '../styles/global.css'
 
 function Dashboard() {
@@ -9,7 +9,7 @@ function Dashboard() {
     useEffect(() => {
         async function buscarDadosDaAPI() {
             try {
-                const resposta = await fetch('http://localhost:3000/atendimentos')
+                const resposta = await fetch('http://localhost:3000/buscarAtendimentos')
                 const dadosQueVieramDoBanco = await resposta.json()
 
                 setAtendimentos(dadosQueVieramDoBanco)
