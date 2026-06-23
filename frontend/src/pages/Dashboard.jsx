@@ -5,19 +5,19 @@ import '../styles/global.css'
 function Dashboard() {
     const [atendimentos, setAtendimentos] = useState([])
     const [metricas, setMetricas] = useState({ pendentes: 0, observacao: 0, concluidos: 0 })
-    const token = localStorage.getItem('token')
-
+    
     useEffect(() => {
         async function buscarDadosDaAPI() {
             try {
                 
+                const token = localStorage.getItem('token')
                 const resposta = await fetch('http://localhost:3000/buscarAtendimentos', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'authorization': `Bearer ${token}`
                     }
-                })    
+                })
                 const dadosQueVieramDoBanco = await resposta.json()
 
                 setAtendimentos(dadosQueVieramDoBanco)
@@ -44,15 +44,16 @@ function Dashboard() {
         }
 
         return atendimentos.map(paciente => {
-            // Converte status para classe CSS (ex: "Em Observação" vira "badge-em-observacao")
-            const statusClass = paciente.status.toLowerCase().replace(' ', '-')
+            // Se o status vir nulo ou indefinido por segurança não quebra o código (.toLowerCase())
+            const statusAtual = paciente.status || 'Pendente'
+            const statusClass = statusAtual.toLowerCase().replace(' ', '-')
 
             return (
                 <tr key={paciente.id}>
                     <td>{paciente.matricula || 'Sem matrícula'}</td>
                     <td>
                         <span className={`badge badge-${statusClass}`}>
-                            {paciente.status}
+                            {statusAtual}
                         </span>
                     </td>
                 </tr>
