@@ -1,107 +1,294 @@
-:root {
-    --primary-color: #2c3e50;
-    --accent-color: #3498db;
-    --bg-color: #f4f7f6;
-    --card-bg: #ffffff;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --grave: #e74c3c;
-    --moderado: #f1c40f;
-    --leve: #2ecc71;
+/* ==========================================
+   1. CONFIGURAÇÕES GERAIS (RESET)
+   ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--primary-color);
+    background-color: #f4f6f9;
+    color: #333;
+    min-height: 100vh;
 }
 
-.container-center {
+/* ==========================================
+   2. ESTILO DA TELA DE LOGIN
+   ========================================== */
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #f4f6f9;
 }
 
-.cards-container {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.card {
-    background: var(--card-bg);
-    padding: 2rem;
+.login-card {
+    background: #ffffff;
+    padding: 40px;
     border-radius: 8px;
-    box-shadow: var(--shadow);
-    flex: 1;
-}
-
-.card-valor {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.input-field {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-card h2 {
+    margin-bottom: 24px;
+    color: #0056b3;
+    /* Azul Neoenergia */
+}
+
+.input-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 16px;
 }
 
 .btn-primary {
     width: 100%;
     padding: 12px;
-    background-color: var(--accent-color);
+    background-color: #0056b3;
     color: white;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
+    font-size: 16px;
     font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
+.btn-primary:hover {
+    background-color: #004085;
+}
+
+/* ==========================================
+   3. ESTILO DO DASHBOARD (TELA PRINCIPAL)
+   ========================================== */
 .dashboard-container {
     padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.header-dashboard {
+.dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* Os Três Cartões do Topo (Métricas) */
+.cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
 }
 
-th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.card .numero {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0056b3;
+}
+
+/* Tabela Geral de Projetos */
+.lista-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.lista-section h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.tabela-projetos {
+    width: 100%;
+    border-collapse: collapse;
     text-align: left;
 }
 
+.tabela-projetos th,
+.tabela-projetos td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tabela-projetos th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+}
+
+.tabela-projetos tbody tr {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tabela-projetos tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Etiquetas coloridas para os Status (Badges) */
 .badge {
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 12px;
-    color: white;
+    font-weight: bold;
     display: inline-block;
 }
 
-.badge-grave {
-    background-color: var(--grave);
+.badge-pendente {
+    background: #ffeeba;
+    color: #856404;
 }
 
-.badge-moderado {
-    background-color: var(--moderado);
+.badge-observacao {
+    background: #f8d7da;
+    color: #721c24;
 }
 
-.badge-leve {
-    background-color: var(--leve);
+/* Atualizado para "Em Observação" */
+.badge-concluido {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Atualizado para "Concluído" */
+
+/* ==========================================
+   4. A JANELA MÁGICA (MODAL)
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Linhas de informações com botão copiar */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.btn-copiar {
+    padding: 4px 8px;
+    font-size: 12px;
+    background: #e2e8f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-copiar:hover {
+    background: #cbd5e1;
+}
+
+/* Área de botões de produtividade (+1) */
+.produtividade-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-prod {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-prod:hover {
+    background-color: #218838;
+}
+
+.btn-fechar {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-fechar:hover {
+    background-color: #bd2130;
 }
