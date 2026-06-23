@@ -5,11 +5,19 @@ import '../styles/global.css'
 function Dashboard() {
     const [atendimentos, setAtendimentos] = useState([])
     const [metricas, setMetricas] = useState({ pendentes: 0, observacao: 0, concluidos: 0 })
+    const token = localStorage.getItem('token')
 
     useEffect(() => {
         async function buscarDadosDaAPI() {
             try {
-                const resposta = await fetch('http://localhost:3000/buscarAtendimentos')
+                
+                const resposta = await fetch('http://localhost:3000/buscarAtendimentos', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `Bearer ${token}`
+                    }
+                })    
                 const dadosQueVieramDoBanco = await resposta.json()
 
                 setAtendimentos(dadosQueVieramDoBanco)
