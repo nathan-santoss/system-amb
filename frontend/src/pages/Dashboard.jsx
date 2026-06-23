@@ -24,13 +24,16 @@ function Dashboard() {
 
         async function buscarAtendimentos() {
             try {
-                const resposta = await fetch('http://localhost:3000/buscarAtendimentos', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': `Bearer ${token}`
+                const resposta = await fetch(
+                    'http://localhost:3000/buscarAtendimentos',
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            authorization: `Bearer ${token}`
+                        }
                     }
-                });
+                );
 
                 if (resposta.status === 401 || resposta.status === 403) {
                     localStorage.removeItem('token');
@@ -44,12 +47,19 @@ function Dashboard() {
                     setAtendimentos(dados);
 
                     setMetricas({
-                        pendentes: dados.filter(a => a.status === 'Pendente').length,
-                        observacao: dados.filter(a => a.status === 'Em Observação').length,
-                        concluidos: dados.filter(a => a.status === 'Concluído').length
+                        pendentes: dados.filter(
+                            atendimento => atendimento.status === 'Pendente'
+                        ).length,
+
+                        observacao: dados.filter(
+                            atendimento => atendimento.status === 'Em Observação'
+                        ).length,
+
+                        concluidos: dados.filter(
+                            atendimento => atendimento.status === 'Concluído'
+                        ).length
                     });
                 }
-
             } catch (erro) {
                 console.error('Erro ao buscar dados:', erro);
             }
@@ -92,31 +102,93 @@ function Dashboard() {
         return '';
     }
 
+    function renderizarAtendimentos() {
+
+        if (atendimentos.length === 0) {
+            return (
+                <tr>
+                    <td
+                        colSpan="3"
+                        style={{
+                            textAlign: 'center',
+                            padding: '20px'
+                        }}
+                    >
+                        Nenhum atendimento na fila.
+                    </td>
+                </tr>
+            );
+        }
+
+        return atendimentos.map((paciente) => {
+
+            let matricula = paciente.matricula;
+            let status = paciente.status;
+
+            if (!matricula) {
+                matricula = 'Sem matrícula';
+            }
+
+            if (!status) {
+                status = 'Pendente';
+            }
+
+            return (
+                <tr key={paciente.id}>
+                    <td>{matricula}</td>
+
+                    <td>
+                        <span
+                            className={`badge badge-${obterClasseStatus(status)}`}
+                        >
+                            {status}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button className="btn-action">
+                            Abrir Ficha
+                        </button>
+                    </td>
+                </tr>
+            );
+        });
+    }
+
     let conteudo;
 
     if (abaAtiva === 'atendimentos') {
+
         conteudo = (
             <React.Fragment>
+
                 <div className="cards-row">
                     <div className="card card-blue">
                         <h3>Pendentes</h3>
-                        <div className="numero">{metricas.pendentes}</div>
+                        <div className="numero">
+                            {metricas.pendentes}
+                        </div>
                     </div>
 
                     <div className="card card-red">
                         <h3>Em Observação</h3>
-                        <div className="numero">{metricas.observacao}</div>
+                        <div className="numero">
+                            {metricas.observacao}
+                        </div>
                     </div>
 
                     <div className="card card-white">
                         <h3>Concluídos</h3>
-                        <div className="numero">{metricas.concluidos}</div>
+                        <div className="numero">
+                            {metricas.concluidos}
+                        </div>
                     </div>
                 </div>
 
                 <section className="lista-section">
                     <div className="lista-header">
                         <h2>Fila de Atendimento</h2>
+
                         <button className="btn-primary">
                             + Nova Triagem
                         </button>
@@ -132,64 +204,21 @@ function Dashboard() {
                         </thead>
 
                         <tbody>
-                            {atendimentos.length === 0 && (
-                                <tr>
-                                    <td
-                                        colSpan="3"
-                                        style={{
-                                            textAlign: 'center',
-                                            padding: '20px'
-                                        }}
-                                    >
-                                        Nenhum atendimento na fila.
-                                    </td>
-                                </tr>
-                            )}
-
-                            {atendimentos.length > 0 &&
-                                atendimentos.map((paciente) => {
-
-                                    let matricula = paciente.matricula;
-
-                                    if (!matricula) {
-                                        matricula = 'Sem matrícula';
-                                    }
-
-                                    let status = paciente.status;
-
-                                    if (!status) {
-                                        status = 'Pendente';
-                                    }
-
-                                    return (
-                                        <tr key={paciente.id}>
-                                            <td>{matricula}</td>
-
-                                            <td>
-                                                <span
-                                                    className={`badge badge-${obterClasseStatus(status)}`}
-                                                >
-                                                    {status}
-                                                </span>
-                                            </td>
-
-                                            <td>
-                                                <button className="btn-action">
-                                                    Abrir Ficha
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                            {renderizarAtendimentos()}
                         </tbody>
                     </table>
                 </section>
+
             </React.Fragment>
         );
+
     } else {
+
         conteudo = (
             <section className="lista-section">
-                <h2>Gestão de {formatarTitulo(abaAtiva)}</h2>
+                <h2>
+                    Gestão de {formatarTitulo(abaAtiva)}
+                </h2>
 
                 <p>
                     O layout para consumir a rota
@@ -202,12 +231,15 @@ function Dashboard() {
 
     return (
         <div className="dashboard-layout">
+
             <aside className="sidebar">
+
                 <div className="sidebar-brand">
                     <h2>Ambulatório</h2>
                 </div>
 
                 <nav className="sidebar-nav">
+
                     <button
                         className={obterClasseBotao('atendimentos')}
                         onClick={() => setAbaAtiva('atendimentos')}
@@ -235,6 +267,7 @@ function Dashboard() {
                     >
                         📄 Atestados
                     </button>
+
                 </nav>
 
                 <div className="sidebar-footer">
@@ -245,15 +278,21 @@ function Dashboard() {
                         Sair do Sistema
                     </button>
                 </div>
+
             </aside>
 
             <main className="dashboard-content">
+
                 <header className="topbar">
-                    <h1>Módulo: {formatarTitulo(abaAtiva)}</h1>
+                    <h1>
+                        Módulo: {formatarTitulo(abaAtiva)}
+                    </h1>
                 </header>
 
                 {conteudo}
+
             </main>
+
         </div>
     );
 }
