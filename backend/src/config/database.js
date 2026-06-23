@@ -1,42 +1,19 @@
-import { Sequelize } from "sequelize"
-import mysql from 'mysql2/promise'
-import 'dotenv/config'
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-const dbHost = process.env.DB_HOST;
-const dbUsuario = process.env.DB_USER;
-const dbSenha = process.env.DB_PASS;
-const dbNome = process.env.DB_NAME;
-// adaptação para o servidor do SENAC: 
-const dbPort = Number(process.env.DB_PORT) || 3306
-
-//configuração original:
-// const dbPort = process.env.DB_PORT
-
-const conexaoSQL = await mysql.createConnection({
-    host: dbHost,
-    port: dbPort,
-    user: dbUsuario,
-    password: dbSenha
-})
-await conexaoSQL.query(`CREATE DATABASE IF NOT EXISTS \`${dbNome}\`;`) //tenta ver se existe, se não, cria
-await conexaoSQL.end()
+// Carrega as variáveis do seu arquivo .env
+dotenv.config();
 
 const database = new Sequelize(
-    dbNome,
-    dbUsuario,
-    dbSenha,
+    process.env.DB_NAME, 
+    process.env.DB_USER, 
+    process.env.DB_PASS, 
     {
-        host: dbHost,
+        host: process.env.DB_HOST, // puxa o 'mysql-db'
         dialect: 'mysql',
-        port: dbPort
+        port: process.env.DB_PORT,
+        logging: false
     }
-)
+);
 
-database.authenticate().then(() => {
-    console.log('Conexão com o banco estabelecida com sucesso!')}
-).catch((error) => {
-    console.error('Erro ao tentar conectar ao banco: ', error);
-})
-
-export default database
-
+export default database;
