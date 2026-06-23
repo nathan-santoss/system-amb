@@ -1,4 +1,4 @@
-import '../styles/global.css';
+import '../../styles/global.css';
 
 function ModalFuncionario({ onClose, onSubmit, formValues, onChange }) {
     return (

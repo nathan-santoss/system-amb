@@ -1,4 +1,3 @@
-import React from 'react';
 import '../../styles/global.css';
 
 function ModalTriagem({ onClose, onSubmit, formValues, onChange }) {
