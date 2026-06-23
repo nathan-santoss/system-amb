@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import '../styles/global.css'
+import { useNavigate } from 'react-router-dom'
 
-
-function Login({ onLoginSuccess }) {
+function Login() {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+
+    const navegar = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -22,11 +24,9 @@ function Login({ onLoginSuccess }) {
 
             if (resposta.ok) {
                 alert("Login realizado com sucesso!")
+                localStorage.setItem('token', dados.token)
+                navegar('/dashboard')
 
-
-                if (onLoginSuccess) {
-                    onLoginSuccess()
-                }
             } else {
                 alert(dados.message || "Erro ao fazer login")
             }
