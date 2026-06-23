@@ -36,14 +36,21 @@ app.get('/', (req, res) => {
     res.json({ status: "Online", mensagem: "API do Ambulatório rodando perfeitamente!" });
 });
 
-// Conecta no Banco e Liga o Servidor
-database.sync()
-    .then(() => {
-        console.log("Banco de dados sincronizado!");
-        app.listen(3000, () => {
-            console.log("Servidor Back-end rodando na porta 3000");
+// Conecta no Banco e Liga o Servidor com Retentativa Automática
+const iniciarServidor = () => {
+    database.sync()
+        .then(() => {
+            console.log("Banco de dados sincronizado e conectado com sucesso!");
+            app.listen(3000, () => {
+                console.log("Servidor Back-end rodando na porta 3000");
+            });
+        })
+        .catch((erro) => {
+            console.error("Banco de dados ainda não está pronto. Tentando novamente em 5 segundos...");
+            // Agora a função já existe, então o setTimeout vai conseguir chamá-la!
+            setTimeout(iniciarServidor, 5000);
         });
-    })
-    .catch((erro) => {
-        console.error("Erro ao sincronizar o banco:", erro);
-    });
+};
+
+// Dispara a função pela primeira vez
+iniciarServidor();
