@@ -9,9 +9,16 @@ function Login() {
 
     const navegar = useNavigate();
 
+    function renderAlertaErro() {
+        if (erro) {
+            return <div className="alerta-erro">{erro}</div>;
+        }
+        return null;
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
-        setErro(''); // Limpa erros anteriores
+        setErro('');
 
         try {
             const resposta = await fetch('http://localhost:3000/auth/login', {
@@ -24,7 +31,7 @@ function Login() {
 
             if (resposta.ok) {
                 localStorage.setItem('token', dados.token);
-                navegar('/dashboard'); // Redireciona com segurança
+                navegar('/dashboard');
             } else {
                 setErro(dados.message || "Credenciais inválidas. Tente novamente.");
             }
@@ -43,7 +50,7 @@ function Login() {
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    {erro && <div className="alerta-erro">{erro}</div>}
+                    {renderAlertaErro()}
 
                     <div className="input-group">
                         <label>E-mail</label>
