@@ -1,82 +1,261 @@
+// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/global.css';
+
+// Importando os ícones específicos do Lucide React
+import {
+    HeartPulse,
+    AlertCircle,
+    User,
+    Lock,
+    ArrowRight
+} from 'lucide-react';
+
+// Importando o novo CSS que criamos
+import '../styles/login.css';
 
 function Login() {
-    const [email, setEmail] = useState('');
+
+    // Estados do Formulário
+    const [identificador, setIdentificador] = useState(''); // Pode ser e-mail ou matrícula
     const [senha, setSenha] = useState('');
     const [erro, setErro] = useState('');
 
     const navegar = useNavigate();
 
-    function renderAlertaErro() {
-        if (erro) {
-            return <div className="alerta-erro">{erro}</div>;
-        }
-        return null;
-    }
-
     async function handleSubmit(e) {
         e.preventDefault();
+
         setErro('');
 
+        // Validação idêntica a que estava no script do seu HTML
+        if (!identificador) {
+            setErro('Por favor, preencha o campo de E-mail ou Matrícula.');
+            return;
+        }
+
+        if (senha.length < 4) {
+            setErro('Senha de segurança muito curta! Digite no mínimo 4 caracteres.');
+            return;
+        }
+
         try {
+
+            // Chamada para o seu Back-end existente
             const resposta = await fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, senha })
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                // Enviamos o 'identificador' na chave 'email'
+                // conforme a estrutura atual do seu backend
+                body: JSON.stringify({
+                    email: identificador,
+                    senha
+                })
             });
 
             const dados = await resposta.json();
 
             if (resposta.ok) {
+
+                // Sucesso: Salva o token e manda para o Dashboard
                 localStorage.setItem('token', dados.token);
+
                 navegar('/dashboard');
-            } else {
-                setErro(dados.message || "Credenciais inválidas. Tente novamente.");
+                return;
             }
+
+            if (dados.message) {
+                setErro(dados.message);
+            } else {
+                setErro('Credenciais incorretas. Tente novamente.');
+            }
+
         } catch (erro) {
-            console.error("Erro na comunicação:", erro);
-            setErro("Falha na conexão com o servidor.");
+
+            console.error('Erro na comunicação:', erro);
+
+            setErro(
+                'Falha na conexão com o servidor. Verifique se o Back-end está rodando.'
+            );
         }
     }
 
-    return (
-        <div className="login-container">
-            <div className="login-card">
-                <div className="login-header">
-                    <h2>Sistema Ambulatorial</h2>
-                    <p>Insira suas credenciais para acessar</p>
+    // Alerta de Erro Condicional
+    let alertaErro = null;
+
+    if (erro) {
+        alertaErro = (
+            <div className="login-error-alert">
+                <div className="login-error-icon">
+                    <AlertCircle size={20} />
                 </div>
 
-                <form onSubmit={handleSubmit}>
-                    {renderAlertaErro()}
+                <div>
+                    <h3 className="login-error-title">
+                        Falha na Autenticação
+                    </h3>
 
-                    <div className="input-group">
-                        <label>E-mail</label>
-                        <input
-                            type="email"
-                            placeholder="enfermeira@empresa.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="input-group">
-                        <label>Senha</label>
-                        <input
-                            type="password"
-                            placeholder="Sua senha de acesso"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <button type="submit" className="btn-primary">Entrar no Sistema</button>
-                </form>
+                    <p className="login-error-text">
+                        {erro}
+                    </p>
+                </div>
             </div>
+        );
+    }
+
+    return (
+        <div className="login-wrapper">
+
+            <div className="login-box">
+
+                {/* Header / Logo */}
+                <div className="login-logo-container">
+
+                    <div className="login-icon-bg">
+                        <HeartPulse
+                            size={48}
+                            strokeWidth={1.5}
+                        />
+                    </div>
+
+                    <h1 className="login-title">
+                        Nexa Logos
+                    </h1>
+
+                    <p className="login-subtitle">
+                        Portal Ambulatorial de Enfermagem
+                    </p>
+
+                </div>
+
+                {/* Alerta de Erro Condicional */}
+                {alertaErro}
+
+                {/* Formulário */}
+                <form
+                    className="login-form"
+                    onSubmit={handleSubmit}
+                >
+
+                    {/* Campo: E-mail ou Matrícula */}
+                    <div>
+
+                        <label className="input-label">
+                            E-mail ou Matrícula
+                        </label>
+
+                        <div className="input-wrapper">
+
+                            <span className="input-icon">
+                                <User size={16} />
+                            </span>
+
+                            <input
+                                type="text"
+                                required
+                                placeholder="enfermagem@nexalogos.com.br ou 1234"
+                                className="login-input"
+                                value={identificador}
+                                onChange={(e) => {
+                                    setIdentificador(e.target.value);
+                                }}
+                            />
+
+                        </div>
+
+                    </div>
+
+                    {/* Campo: Senha */}
+                    <div>
+
+                        <div className="input-label-row">
+
+                            <label
+                                className="input-label"
+                                style={{ marginBottom: 0 }}
+                            >
+                                Senha de Segurança
+                            </label>
+
+                            <a
+                                href="#"
+                                className="input-link"
+                            >
+                                Esqueci a senha
+                            </a>
+
+                        </div>
+
+                        <div className="input-wrapper">
+
+                            <span className="input-icon">
+                                <Lock size={16} />
+                            </span>
+
+                            <input
+                                type="password"
+                                required
+                                placeholder="••••••••"
+                                className="login-input"
+                                value={senha}
+                                onChange={(e) => {
+                                    setSenha(e.target.value);
+                                }}
+                            />
+
+                        </div>
+
+                    </div>
+
+                    {/* Lembrar-me */}
+                    <div className="checkbox-wrapper">
+
+                        <input
+                            id="remember-me"
+                            type="checkbox"
+                            className="checkbox-input"
+                        />
+
+                        <label
+                            htmlFor="remember-me"
+                            className="checkbox-label"
+                        >
+                            Manter meu login ativo nesta estação
+                        </label>
+
+                    </div>
+
+                    {/* Botão de Submit */}
+                    <button
+                        type="submit"
+                        className="btn-submit"
+                    >
+
+                        <span>
+                            Acessar Nexa Logos
+                        </span>
+
+                        <ArrowRight size={16} />
+
+                    </button>
+
+                </form>
+
+                {/* Rodapé */}
+                <div className="login-footer">
+
+                    <p>
+                        Uso exclusivo da equipe de enfermagem autorizada.
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
     );
 }
