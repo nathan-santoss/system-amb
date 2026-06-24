@@ -47,10 +47,8 @@ const iniciarServidor = () => {
         })
         .catch((erro) => {
             console.error("Banco de dados ainda não está pronto. Tentando novamente em 5 segundos...");
-            // Agora a função já existe, então o setTimeout vai conseguir chamá-la!
             setTimeout(iniciarServidor, 5000);
         });
 };
 
-// Dispara a função pela primeira vez
 iniciarServidor();
