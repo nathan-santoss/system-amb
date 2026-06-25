@@ -11,7 +11,7 @@ services:
       - db_data:/var/lib/mysql
     # Adicione este bloco de saúde:
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSt8z1kt8.0711" ]
       interval: 5s
       timeout: 5s
       retries: 5
