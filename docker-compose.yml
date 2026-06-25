@@ -12,9 +12,10 @@ services:
     # Adicione este bloco de saúde:
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSt8z1kt8.0711" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      interval: 10s # Testa a cada 10 segundos
+      timeout: 5s # Espera 5 segundos pela resposta
+      retries: 10 # Tenta até 10 vezes (100 segundos no total)
+      start_period: 40s # Dá 40 segundos de "imunidade" inicial para o MySQL ligar com calma
 
   backend:
     build: ./backend

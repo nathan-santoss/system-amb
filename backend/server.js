@@ -16,6 +16,9 @@ import alergiaRoutes from './src/routes/alergiaRoutes.js';
 import atestadoRoutes from './src/routes/atestadoRoutes.js';
 import authRoutes from './src/routes/authRoutes.js'
 
+// criacao de usuario master
+import { criarUsuarioMaster } from './src/config/masterUser.js'
+
 const app = express();
 
 // Libera a porta para o React conversar com o Node (CORS)
@@ -41,6 +44,8 @@ const iniciarServidor = () => {
     database.sync()
         .then(() => {
             console.log("Banco de dados sincronizado e conectado com sucesso!");
+            await criarUsuarioMaster()
+
             app.listen(3000, () => {
                 console.log("Servidor Back-end rodando na porta 3000");
             });
