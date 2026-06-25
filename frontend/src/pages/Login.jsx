@@ -56,7 +56,7 @@ function Login() {
         } catch (erro) {
             console.error('Erro na comunicação:', erro);
             setErro(
-                'Falha na conexão com o servidor. Verifique se o Back-end está rodando.'
+                'Falha na conexão com o servidor. Verifique o Back-end!'
             );
         }
     }
