@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layouts/DashboardLayout';
 import {
@@ -19,8 +19,7 @@ export default function ConsultarPaciente() {
     const [carregando, setCarregando] = useState(false);
     const [erro, setErro] = useState('');
 
-    // Função para buscar pacientes do Back-end
-    async function buscarPacientes() {
+    const buscarPacientes = useCallback(async () => {
 
         setCarregando(true);
         setErro('');
@@ -60,26 +59,19 @@ export default function ConsultarPaciente() {
         } finally {
             setCarregando(false);
         }
-    }
+    }, [pesquisa]); // 'pesquisa' é uma dependência para que a função seja recriada quando o valor de pesquisa mudar
 
-    // Carrega a lista inicial ao montar a tela
     useEffect(() => {
-
         async function carregarPacientes() {
             await buscarPacientes();
         }
-
         carregarPacientes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); 
+    }, [buscarPacientes]); // 'buscarPacientes' agora é uma dependência estável graças ao useCallback
 
-    // Disparado ao submeter o formulário de busca
     function handleSearch(e) {
         e.preventDefault();
         buscarPacientes();
     }
-
-    // Mensagem de erro
     let mensagemErro = null;
 
     if (erro) {
@@ -91,7 +83,6 @@ export default function ConsultarPaciente() {
         );
     }
 
-    // Conteúdo principal
     let conteudoTabela
 
     if (carregando) {
@@ -109,7 +100,6 @@ export default function ConsultarPaciente() {
             <div className="overflow-x-auto">
 
                 <table className="w-full text-left border-collapse">
-
                     <thead>
                         <tr className="bg-slate-50 text-slate-400 uppercase text-[10px] tracking-wider font-bold border-b border-slate-100">
                             <th className="py-3 px-6">
@@ -125,7 +115,6 @@ export default function ConsultarPaciente() {
                             </th>
                         </tr>
                     </thead>
-
                     <tbody className="divide-y divide-slate-100 text-sm">
 
                         {pacientes.map((paciente) => {
@@ -141,11 +130,8 @@ export default function ConsultarPaciente() {
                                     key={paciente.matricula}
                                     className="hover:bg-slate-50/40 transition-colors"
                                 >
-
                                     <td className="py-4 px-6">
-
                                         <div className="flex flex-col">
-
                                             <span className="font-bold text-slate-800">
                                                 {paciente.nome}
                                             </span>
@@ -168,13 +154,9 @@ export default function ConsultarPaciente() {
                                             </div>
 
                                         </div>
-
                                     </td>
-
                                     <td className="py-4 px-6">
-
                                         <div className="flex flex-col">
-
                                             <span className="font-medium text-slate-700">
                                                 {paciente.cargo}
                                             </span>
@@ -185,11 +167,8 @@ export default function ConsultarPaciente() {
                                             </span>
 
                                         </div>
-
                                     </td>
-
                                     <td className="py-4 px-6 text-center">
-
                                         <button
                                             onClick={() => {
                                                 navigate(
@@ -199,14 +178,11 @@ export default function ConsultarPaciente() {
                                             className="bg-azulEscuro hover:bg-blue-800 text-white py-2 px-4 rounded-xl font-bold text-xs transition-all shadow-sm inline-flex items-center gap-2"
                                         >
                                             <FolderOpen className="w-4 h-4" />
-
                                             <span>
                                                 Abrir Prontuário
                                             </span>
                                         </button>
-
                                     </td>
-
                                 </tr>
                             );
                         })}
@@ -215,7 +191,7 @@ export default function ConsultarPaciente() {
 
                 </table>
 
-            </div>
+            </div >
         );
 
     } else {
@@ -248,10 +224,7 @@ export default function ConsultarPaciente() {
         >
 
             <div className="flex-1 overflow-y-auto p-8 space-y-6">
-
-                {/* Barra de Ações (Pesquisa + Novo Cadastro) */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-
                     <form
                         onSubmit={handleSearch}
                         className="flex-1 relative max-w-lg"
@@ -266,17 +239,12 @@ export default function ConsultarPaciente() {
                                 setPesquisa(e.target.value);
                             }}
                         />
-
                         <span className="absolute left-3 top-3 text-slate-400">
                             <Search className="w-5 h-5" />
                         </span>
-
                     </form>
-
                     <button className="bg-azulEscuro hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center justify-center gap-2 flex-shrink-0">
-
                         <UserPlus className="w-4 h-4" />
-
                         <span>
                             Cadastrar Funcionário
                         </span>
@@ -284,11 +252,7 @@ export default function ConsultarPaciente() {
                     </button>
 
                 </div>
-
-                {/* Mensagem de Erro ou Alerta */}
                 {mensagemErro}
-
-                {/* Tabela ou Estados Alternativos */}
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     {conteudoTabela}
                 </div>

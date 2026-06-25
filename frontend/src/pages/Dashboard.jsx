@@ -4,10 +4,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import { Activity, Plus, MousePointerClick, HeartPulse, ClipboardList, UserCheck, CalendarCheck, ListVideo, BarChart3, Clock, Gauge, Thermometer, X } from 'lucide-react';
 
 export default function Dashboard() {
-    // Estado para controlar a visibilidade da janela modal
     const [isObservationModalOpen, setIsObservationModalOpen] = useState(false);
-
-    // Conteúdo do modal de observação, renderizado condicionalmente
     let observationModalContent = null;
     if (isObservationModalOpen) {
         observationModalContent = (
@@ -61,8 +58,6 @@ export default function Dashboard() {
     return (
         <DashboardLayout titulo="Painel Geral" subtitulo="Visão do Plantão">
             <div className="flex-1 overflow-y-auto p-8 space-y-6">
-
-                {/* Banner de Ação Rápida */}
                 <div className="bg-gradient-to-r from-azulEscuro to-blue-800 rounded-2xl p-6 text-white shadow-lg shadow-blue-900/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border border-blue-700">
                     <div>
                         <h3 className="text-xl font-bold flex items-center gap-2">
@@ -77,9 +72,8 @@ export default function Dashboard() {
                     </button>
                 </div>
 
-                {/* Grelha de Métricas (KPIs) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* Em Observação (Clicável - Abre a Modal) */}
+
                     <div onClick={() => setIsObservationModalOpen(true)} className="bg-white rounded-2xl p-5 border border-red-100 shadow-sm hover:shadow-lg hover:border-red-300 transition-all group cursor-pointer relative overflow-hidden transform hover:-translate-y-1">
                         <div className="absolute top-0 left-0 w-full h-1.5 bg-vermelhoAlerta"></div>
                         <div className="flex items-start justify-between">
@@ -130,10 +124,7 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* Secção Central */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-                    {/* Últimos Atendimentos */}
                     <div className="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
                         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                             <div className="flex items-center gap-2">
@@ -171,8 +162,6 @@ export default function Dashboard() {
                             </table>
                         </div>
                     </div>
-
-                    {/* Por Núcleo */}
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
                         <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
                             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-sm">
@@ -200,10 +189,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            {/* MODAL DE OBSERVAÇÃO */}
             {observationModalContent}
         </DashboardLayout>
     );

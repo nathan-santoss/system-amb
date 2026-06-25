@@ -4,21 +4,15 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import { ArrowLeft, Activity, AlertCircle, Save, Plus } from 'lucide-react';
 
 export default function FichaPaciente() {
-    const { matricula } = useParams(); // Resgata a matrícula dinâmica da URL
+    const { matricula } = useParams();
     const navigate = useNavigate();
-
-    // Estados do componente
     const [paciente, setPaciente] = useState(null);
     const [carregando, setCarregando] = useState(true);
-
-    // Estado estruturado para capturar o formulário de triagem
     const [triagem, setTriagem] = useState({
         pressao: '',
         temperatura: '',
         queixa: ''
     });
-
-    // 1. Carrega os dados fixos do paciente vindo da API ao montar o ecrã
     useEffect(() => {
         async function buscarDetalhes() {
             try {
@@ -40,14 +34,10 @@ export default function FichaPaciente() {
         buscarDetalhes();
     }, [matricula]);
 
-    // 2. Função de Captura Inteligente para múltiplos Inputs
     function handleChange(e) {
         const { name, value } = e.target;
-        // Mantém o que já estava digitado e atualiza apenas o campo que mudou
         setTriagem(prev => ({ ...prev, [name]: value }));
     }
-
-    // 3. Ecrã de Carregamento Assíncrono
     if (carregando) {
         return (
             <DashboardLayout titulo="Prontuário Médico" subtitulo="A aceder à base Nexa Logos...">
@@ -58,7 +48,6 @@ export default function FichaPaciente() {
         );
     }
 
-    // 4. Tratamento de Erro caso a matrícula não exista
     if (!paciente) {
         return (
             <DashboardLayout titulo="Erro" subtitulo="Paciente não localizado">
@@ -78,8 +67,6 @@ export default function FichaPaciente() {
     return (
         <DashboardLayout titulo="Prontuário Médico" subtitulo={`Atendimento de ${paciente.nome}`}>
             <div className="flex-1 overflow-y-auto p-8 space-y-6">
-
-                {/* Cabeçalho superior com Botão Voltar */}
                 <div className="flex items-center justify-between">
                     <button
                         onClick={() => navigate('/consultar-paciente')}
@@ -91,18 +78,13 @@ export default function FichaPaciente() {
                         Matrícula: <span className="font-mono text-azulEscuro">{paciente.matricula}</span>
                     </div>
                 </div>
-
-                {/* Estrutura de Grelha: Coluna Principal (Triagem) vs Lateral (Histórico/Alertas) */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                    {/* FORMULÁRIO DE TRIAGEM (O AGORA) */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center gap-2">
                                 <Activity className="w-5 h-5 text-azulEscuro" />
                                 <h3 className="font-bold text-slate-700">Nova Triagem / Atendimento</h3>
                             </div>
-
                             <div className="p-6 space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
@@ -128,7 +110,6 @@ export default function FichaPaciente() {
                                         />
                                     </div>
                                 </div>
-
                                 <div>
                                     <label className="block text-xs font-bold text-slate-500 mb-1">Queixa Principal / Observações</label>
                                     <textarea
@@ -140,37 +121,33 @@ export default function FichaPaciente() {
                                         className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-azulEscuro focus:ring-2 focus:ring-azulEscuro/20 transition-all resize-none"
                                     ></textarea>
                                 </div>
-
-                                    <div className="flex justify-end pt-2">
-                                        <button className="bg-azulEscuro hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center gap-2">
-                                            <Save className="w-4 h-4" />
-                                            Registrar Atendimento
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* PAINEL LATERAL (ALERTAS MÉDICOS E ALERGIAS) */}
-                        <div className="space-y-6">
-                            <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
-                                <div className="p-4 bg-red-50 border-b border-red-100 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <AlertCircle className="w-5 h-5 text-red-500" />
-                                        <h3 className="font-bold text-slate-700 text-sm">Alergias Conhecidas</h3>
-                                    </div>
-                                    <button className="text-red-600 hover:bg-red-100 p-1 rounded transition-colors" title="Adicionar Alergia">
-                                        <Plus className="w-4 h-4" />
+                                <div className="flex justify-end pt-2">
+                                    <button className="bg-azulEscuro hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center gap-2">
+                                        <Save className="w-4 h-4" />
+                                        Registrar Atendimento
                                     </button>
                                 </div>
-                                <div className="p-6">
-                                    <p className="text-sm text-slate-400 italic text-center py-4">Nenhuma alergia registada até ao momento.</p>
-                                </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div className="space-y-6">
+                        <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+                            <div className="p-4 bg-red-50 border-b border-red-100 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <AlertCircle className="w-5 h-5 text-red-500" />
+                                    <h3 className="font-bold text-slate-700 text-sm">Alergias Conhecidas</h3>
+                                </div>
+                                <button className="text-red-600 hover:bg-red-100 p-1 rounded transition-colors" title="Adicionar Alergia">
+                                    <Plus className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="p-6">
+                                <p className="text-sm text-slate-400 italic text-center py-4">Nenhuma alergia registada até ao momento.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
         </DashboardLayout>
     );
 }
