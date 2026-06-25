@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import Funcionario from '../models/funcionarios.js'
 import Usuario from '../models/usuarios.js'
 

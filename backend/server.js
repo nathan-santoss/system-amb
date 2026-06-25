@@ -17,7 +17,7 @@ import atestadoRoutes from './src/routes/atestadoRoutes.js';
 import authRoutes from './src/routes/authRoutes.js'
 
 // criacao de usuario master
-import { criarUsuarioMaster } from './src/config/masterUser.js'
+import { criarUsuarioMaster } from './src/config/masterUser.js';
 
 const app = express();
 
