@@ -18,4 +18,5 @@ router.patch(`/funcionarios/:matricula`, verificarToken, atualizarFuncionario)
 
 router.delete(`/funcionarios/:matricula`, verificarToken, deletarFuncionario)
 
+router.get(`/funcionarios/:matricula`, verificarToken, buscarFuncionarioPorMatricula)
 export default router

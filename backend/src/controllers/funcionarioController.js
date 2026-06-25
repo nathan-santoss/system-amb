@@ -1,4 +1,5 @@
 import Funcionario from '../models/funcionarios.js'
+import { Op } from 'sequelize'
 
 // cadastrar funcionário
 export async function cadastrarFuncionario(req, res) {
@@ -12,15 +13,26 @@ export async function cadastrarFuncionario(req, res) {
     }
 }
 
-// buscar funcionários
-export async function buscarFuncionarios(req, res) {
-    try {
-        const funcionarios = await Funcionario.findAll()
+// buscar funcionários (com ou sem filtro de pesquisa)
+async function buscarPacientes() {
+    setCarregando(true);
+    setErro('');
 
-        res.status(200).json(funcionarios)
+    try {
+        // 1. Definimos apenas o final da rota (o api.js já sabe que é localhost:3000)
+        const url = pesquisa ? `/funcionarios?busca=${pesquisa}` : `/funcionarios`;
+
+        // 2. Fazemos o pedido! (O api.js envia o Token automaticamente)
+        const resposta = await api.get(url);
+
+        // 3. Guardamos os dados
+        setPacientes(resposta.data);
 
     } catch (erro) {
-        res.status(500).json({ erro: erro.message })
+        console.error("Erro ao procurar pacientes:", erro);
+        setErro('Não foi possível carregar a lista.');
+    } finally {
+        setCarregando(false);
     }
 }
 
@@ -61,5 +73,24 @@ export async function deletarFuncionario(req, res) {
 
     } catch (erro) {
         res.status(500).json({ erro: erro.message })
+    }
+}
+
+// buscar funcionário por matrícula
+export async function buscarFuncionarioPorMatricula(req, res) {
+    try {
+        const { matricula } = req.params;
+
+        // Procura no banco de dados pela chave primária (matrícula)
+        const funcionario = await Funcionario.findByPk(matricula);
+
+        if (!funcionario) {
+            return res.status(404).json({ mensagem: `Funcionário não encontrado` });
+        }
+
+        res.status(200).json(funcionario);
+
+    } catch (erro) {
+        res.status(500).json({ erro: erro.message });
     }
 }
