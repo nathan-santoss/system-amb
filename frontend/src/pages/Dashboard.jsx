@@ -7,6 +7,57 @@ export default function Dashboard() {
     // Estado para controlar a visibilidade da janela modal
     const [isObservationModalOpen, setIsObservationModalOpen] = useState(false);
 
+    // Conteúdo do modal de observação, renderizado condicionalmente
+    let observationModalContent = null;
+    if (isObservationModalOpen) {
+        observationModalContent = (
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+                    <div className="p-6 border-b border-red-100 bg-red-50 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-white p-2 rounded-lg shadow-sm border border-red-100">
+                                <Activity className="w-5 h-5 text-vermelhoAlerta animate-pulse" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-vermelhoAlerta text-lg">Pacientes em Observação</h3>
+                            </div>
+                        </div>
+                        <button onClick={() => setIsObservationModalOpen(false)} className="text-slate-400 hover:text-slate-600 hover:bg-red-100 p-2 rounded-lg transition-colors">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    <div className="p-6 overflow-y-auto bg-slate-50/50 space-y-4">
+                        <div className="border border-red-200 bg-white rounded-xl p-5 shadow-sm relative overflow-hidden">
+                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-vermelhoAlerta"></div>
+                            <div className="pl-2 space-y-3">
+                                <div className="flex justify-between items-start">
+                                    <h4 className="font-bold text-slate-800 text-base">Carlos Eduardo Souza</h4>
+                                    <span className="text-xs font-bold text-vermelhoAlerta flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md border border-red-100">
+                                        <Clock className="w-3 h-3" /> Triado às 08:30
+                                    </span>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-100">
+                                    <span className="bg-red-50 text-vermelhoAlerta text-xs font-bold px-3 py-1.5 rounded-md border border-red-100 flex items-center gap-1.5">
+                                        <Gauge className="w-3.5 h-3.5" /> PA: 150/100
+                                    </span>
+                                    <span className="bg-amber-50 text-amber-600 text-xs font-bold px-3 py-1.5 rounded-md border border-amber-200 flex items-center gap-1.5">
+                                        <Thermometer className="w-3.5 h-3.5" /> Temp: 38.2°C
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="mt-4 pt-4 flex gap-3 justify-end border-t border-red-100">
+                                <button onClick={() => setIsObservationModalOpen(false)} className="text-xs bg-emerald-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-emerald-700 transition-all">
+                                    Concluir e Liberar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <DashboardLayout titulo="Painel Geral" subtitulo="Visão do Plantão">
             <div className="flex-1 overflow-y-auto p-8 space-y-6">
@@ -152,53 +203,8 @@ export default function Dashboard() {
 
             </div>
 
-            {/* MODAL DE OBSERVAÇÃO (Renderização Condicional React) */}
-            {isObservationModalOpen && (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
-                        <div className="p-6 border-b border-red-100 bg-red-50 flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-white p-2 rounded-lg shadow-sm border border-red-100">
-                                    <Activity className="w-5 h-5 text-vermelhoAlerta animate-pulse" />
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-vermelhoAlerta text-lg">Pacientes em Observação</h3>
-                                </div>
-                            </div>
-                            <button onClick={() => setIsObservationModalOpen(false)} className="text-slate-400 hover:text-slate-600 hover:bg-red-100 p-2 rounded-lg transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <div className="p-6 overflow-y-auto bg-slate-50/50 space-y-4">
-                            <div className="border border-red-200 bg-white rounded-xl p-5 shadow-sm relative overflow-hidden">
-                                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-vermelhoAlerta"></div>
-                                <div className="pl-2 space-y-3">
-                                    <div className="flex justify-between items-start">
-                                        <h4 className="font-bold text-slate-800 text-base">Carlos Eduardo Souza</h4>
-                                        <span className="text-xs font-bold text-vermelhoAlerta flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md border border-red-100">
-                                            <Clock className="w-3 h-3" /> Triado às 08:30
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-100">
-                                        <span className="bg-red-50 text-vermelhoAlerta text-xs font-bold px-3 py-1.5 rounded-md border border-red-100 flex items-center gap-1.5">
-                                            <Gauge className="w-3.5 h-3.5" /> PA: 150/100
-                                        </span>
-                                        <span className="bg-amber-50 text-amber-600 text-xs font-bold px-3 py-1.5 rounded-md border border-amber-200 flex items-center gap-1.5">
-                                            <Thermometer className="w-3.5 h-3.5" /> Temp: 38.2°C
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="mt-4 pt-4 flex gap-3 justify-end border-t border-red-100">
-                                    <button onClick={() => setIsObservationModalOpen(false)} className="text-xs bg-emerald-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-emerald-700 transition-all">
-                                        Concluir e Liberar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* MODAL DE OBSERVAÇÃO */}
+            {observationModalContent}
         </DashboardLayout>
     );
 }
