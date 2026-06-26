@@ -21,7 +21,6 @@ import criarUsuarioMaster from './src/config/masterUser.js'
 
 const app = express();
 
-// Libera a porta para o React conversar com o Node (CORS)
 app.use(cors());
 
 // Configura o Express para ler e enviar JSON

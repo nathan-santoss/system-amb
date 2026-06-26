@@ -1,0 +1,12 @@
+{
+  "name": "system-amb-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerenciador para iniciar backend e frontend simultaneamente.",
+  "scripts": {
+    "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
