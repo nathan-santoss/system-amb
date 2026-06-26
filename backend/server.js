@@ -36,7 +36,7 @@ app.use('/api/auth', authRoutes);
 
 // Rota Inicial (devolve um JSON)
 app.get('/', (req, res) => {
-    res.json({ status: "Online", mensagem: "API do Ambulatório rodando perfeitamente!" });
+    res.render('login'); 
 });
 
 // Conecta no Banco e Liga o Servidor com Retentativa Automática
