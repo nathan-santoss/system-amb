@@ -1,4 +1,23 @@
 import Atendimento from '../models/atendimento.js'
+import { Op } from 'sequelize'; 
+
+export const contarAtendimentosHoje = async (req, res) => {
+    try {
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const total = await Atendimento.count({
+            where: {
+                data_atendimento: {
+                    [Op.gte]: hoje // Op.gte significa "maior ou igual a hoje"
+                }
+            }
+        });
+        res.status(200).json({ total });
+    } catch (erro) {
+        res.status(500).json({ erro: "Erro ao contar atendimentos." });
+    }
+}
 
 // registrar atendimento
 export async function registrarAtendimento(req, res) {
@@ -77,3 +96,4 @@ export const searchAll = async (req, res) => {
         res.status(500).json({ erro: error.message })
     }
 }
+
