@@ -13,18 +13,21 @@ export async function cadastrarAlergia(req, res) {
 }
 
 // buscar alergias por funcionário
-export async function buscarAlergiasPorFuncionario(req, res) {
+export async function buscarAlergias(req, res) {
     try {
-        const { matricula } = req.params
-
+        const { funcionario_matricula } = req.query; // Captura a matrícula vinda da URL
+        
+        if (!funcionario_matricula) {
+            return res.status(400).json({ erro: "Matrícula não fornecida." });
+        }
+        
         const alergias = await Alergia.findAll({
-            where: { funcionario_matricula: matricula }
-        })
-
-        res.status(200).json(alergias)
-
+            where: { funcionario_matricula: funcionario_matricula }
+        });
+        
+        res.status(200).json(alergias);
     } catch (erro) {
-        res.status(500).json({ erro: erro.message })
+        res.status(500).json({ erro: "Erro ao buscar alergias" });
     }
 }
 
