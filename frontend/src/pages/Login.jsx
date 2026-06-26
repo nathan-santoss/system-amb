@@ -1,30 +1,32 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../services/api'
 
 function Login() {
     const navigate = useNavigate()
-    const [usuario, setUsuario] = useState('')
+    const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [erro, setErro] = useState('')
 
     const handleLogin = async (e) => {
         e.preventDefault()
         setErro('')
+
         try {
-            const resposta = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usuario, senha })
-            })
-            const dados = await resposta.json()
-            if (resposta.ok) {
-                localStorage.setItem('token', dados.token)
+            // O Helper 'api' já sabe a URL base, enviamos apenas o endpoint e os dados
+            const response = await api('/auth/login', 'POST', { email, senha })
+
+            if (response.ok) {
+                const data = await response.json()
+                localStorage.setItem('token', data.token)
                 navigate('/dashboard')
             } else {
-                setErro(dados.erro || 'Credenciais inválidas')
+                const errData = await response.json()
+                setErro(errData.message || 'Erro ao realizar login.')
             }
-        } catch (err) {
-            setErro('Erro ao conectar com o servidor: ', err.message)
+        } catch (error) {
+            setErro('Erro ao conectar com o servidor.')
+            console.error('Erro na requisição ->>>>', error)
         }
     }
 
@@ -42,12 +44,12 @@ function Login() {
                 )}
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-semibold text-cinzaTexto mb-2">Usuário / Matrícula</label>
+                        <label className="block text-sm font-semibold text-cinzaTexto mb-2">E-mail</label>
                         <input
-                            type="text"
+                            type="email"
                             required
-                            value={usuario}
-                            onChange={(e) => setUsuario(e.target.value)}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-cinzaTexto focus:outline-none focus:ring-2 focus:ring-azulEscuro focus:border-transparent transition"
                         />
                     </div>
