@@ -54,19 +54,19 @@ export async function atualizarAlergia(req, res) {
 // deletar alergia
 export async function deletarAlergia(req, res) {
     try {
-        const { id } = req.params
-
+        const { id_alergia } = req.params;
+        
         const deletado = await Alergia.destroy({
-            where: { id_alergia: id }
-        })
-
-        if (!deletado) throw new Error(`Alergia não encontrada`)
-
-        res.status(200).json({
-            mensagem: `Alergia removida com sucesso`
-        })
-
+            where: { id_alergia: id_alergia }
+        });
+        
+        if (deletado) {
+            res.status(200).json({ mensagem: "Alergia removida com sucesso!" });
+        } else {
+            res.status(404).json({ erro: "Alergia não encontrada." });
+        }
     } catch (erro) {
-        res.status(500).json({ erro: erro.message })
+        console.error(erro);
+        res.status(500).json({ erro: "Erro ao tentar remover a alergia." });
     }
 }
