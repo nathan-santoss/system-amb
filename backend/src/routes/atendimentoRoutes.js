@@ -5,7 +5,6 @@ import {
     buscarAtendimentosPorFuncionario,
     atualizarAtendimento,
     deletarAtendimento,
-    searchAll,
     contarAtendimentosHoje
 } from '../controllers/atendimentoController.js'
 import { verificarToken } from '../middlewares/authMiddleware.js'
@@ -19,10 +18,6 @@ router.put(`/atendimentos/:id`, verificarToken, atualizarAtendimento)
 router.patch(`/atendimentos/:id`, verificarToken, atualizarAtendimento)
 
 router.delete(`/atendimentos/:id`, verificarToken, deletarAtendimento)
-
-
-// buscar todos atendimentos
-router.get('/buscarAtendimentos', verificarToken, searchAll)
 
 router.get('/contagem-hoje', verificarToken, contarAtendimentosHoje);
 export default router
