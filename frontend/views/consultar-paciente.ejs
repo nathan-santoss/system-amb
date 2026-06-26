@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <%- include('partials/head') %>
+</head>
+
+<body class="bg-cinzaFundo flex min-h-screen overflow-hidden text-cinzaTexto">
+
+    <%- include('partials/sidebar') %>
+
+        <main class="flex-1 p-8 overflow-y-auto w-full">
+
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-800 mb-1">Buscar Paciente</h1>
+                <p class="text-slate-500 text-sm">Pesquise por nome, matrícula ou CPF para iniciar o atendimento.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                <form id="formBusca" class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1 relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="h-5 w-5 text-slate-400"></i>
+                        </div>
+                        <input type="text" id="inputBusca" placeholder="Digite o termo de busca..."
+                            class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-azulEscuro focus:border-transparent transition-all">
+                    </div>
+                    <button type="submit"
+                        class="bg-azulEscuro hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                        Buscar Ficha
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                            <tr
+                                class="bg-slate-50 border-b border-slate-100 text-slate-500 text-sm uppercase tracking-wider">
+                                <th class="py-4 px-6 font-semibold">Matrícula</th>
+                                <th class="py-4 px-6 font-semibold">Nome do Funcionário</th>
+                                <th class="py-4 px-6 font-semibold">Cargo / Setor</th>
+                                <th class="py-4 px-6 font-semibold text-center">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaPacientes" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="4" class="py-12 text-center text-slate-400">
+                                    <i data-lucide="users" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                                    <p>Utilize a barra acima para procurar um paciente no sistema.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+        <script>
+            lucide.createIcons();
+            if (!localStorage.getItem('token')) window.location.href = '/';
+            function fazerLogout() { localStorage.removeItem('token'); window.location.href = '/'; }
+        </script>
+        <script src="/js/consultar-paciente.js"></script>
+</body>
+
+</html>

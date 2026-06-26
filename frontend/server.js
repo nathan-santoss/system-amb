@@ -14,7 +14,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.send('O servidor EJS está pronto para receber as páginas!'); 
+    res.render('login'); 
+});
+
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard'); 
+});
+
+app.get('/consultar-paciente', (req, res) => {
+    res.render('consultar-paciente'); 
+});
+
+app.get('/ficha-paciente', (req, res) => {
+    res.render('ficha-paciente'); 
 });
 
 app.listen(PORT, () => {

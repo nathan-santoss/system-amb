@@ -16,10 +16,10 @@ async function criarUsuarioMaster() {
             if (!funcionarioExiste) {
                 await Funcionario.create({
                     matricula: matricula,
-                    nome: 'Avaliador',
+                    nome: 'Aparecida',
                     cpf: '00000000000',
                     cargo: 'Chefe',
-                    setor: 'Administração'
+                    setor: 'TI'
                 })
             }
 

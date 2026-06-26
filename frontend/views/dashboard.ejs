@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <%- include('partials/head') %>
+</head>
+
+<body class="bg-cinzaFundo flex min-h-screen overflow-hidden text-cinzaTexto">
+
+    <%- include('partials/sidebar') %>
+
+        <main class="flex-1 p-8 overflow-y-auto w-full">
+
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-800 mb-1">Painel de Gestão</h1>
+                    <p class="text-slate-500 text-sm">Resumo do turno atual e acessos rápidos.</p>
+                </div>
+                <div
+                    class="flex items-center gap-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 hidden sm:flex">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-azulEscuro">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-700">Enf. Responsável</p>
+                        <p class="text-xs text-slate-400">Turno Padrão</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-slate-500 font-medium text-sm mb-1">Atendimentos Hoje</p>
+                            <h3 class="text-4xl font-bold text-azulEscuro">0</h3>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-azulEscuro">
+                            <i data-lucide="activity"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <script>
+            lucide.createIcons();
+            if (!localStorage.getItem('token')) {
+                window.location.href = '/';
+            }
+
+            // Função de Sair
+            function fazerLogout() {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }
+        </script>
+</body>
+
+</html>

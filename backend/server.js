@@ -28,16 +28,12 @@ app.use(cors());
 app.use(express.json());
 
 //Rotas da API
-app.use('/api/', funcionarioRoutes);
-app.use('/api/', atendimentoRoutes);
-app.use('/api/', alergiaRoutes);
-app.use('/api/', atestadoRoutes);
-app.use('/api/auth', authRoutes);
+app.use(funcionarioRoutes);
+app.use(atendimentoRoutes);
+app.use(alergiaRoutes);
+app.use(atestadoRoutes);
+app.use('/auth', authRoutes);
 
-// Rota Inicial (devolve um JSON)
-app.get('/', (req, res) => {
-    res.render('login'); 
-});
 
 // Conecta no Banco e Liga o Servidor com Retentativa Automática
 async function iniciarServidor() {
