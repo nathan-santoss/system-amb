@@ -1,8 +1,7 @@
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
         "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
+        "./src/**/*.{js,ts,jsx,tsx}"
     ],
     theme: {
         extend: {
@@ -13,9 +12,9 @@ export default {
                 cinzaTexto: '#334155'
             },
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
+                sans: ['Inter', 'sans-serif']
             }
-        },
+        }
     },
-    plugins: [],
+    plugins: []
 }

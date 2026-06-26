@@ -1,12 +1,15 @@
-import '../../styles/global.css';
+import { useNavigate, useLocation } from 'react-router-dom'
 
-function Sidebar({ abaAtiva, setAbaAtiva, onLogout }) {
-    const getAbaClassName = (aba) => {
-        if (abaAtiva === aba) {
-            return 'active';
+function Sidebar({ onLogout }) {
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const getAbaClassName = (path) => {
+        if (location.pathname === path) {
+            return 'active'
         }
-        return '';
-    };
+        return ''
+    }
 
     return (
         <aside className="sidebar">
@@ -15,26 +18,26 @@ function Sidebar({ abaAtiva, setAbaAtiva, onLogout }) {
             </div>
             <nav className="sidebar-nav">
                 <button
-                    className={getAbaClassName('atendimentos')}
-                    onClick={() => setAbaAtiva('atendimentos')}
+                    className={getAbaClassName('/dashboard')}
+                    onClick={() => navigate('/dashboard')}
                 >
                     Locais Atendimentos
                 </button>
                 <button
-                    className={getAbaClassName('funcionarios')}
-                    onClick={() => setAbaAtiva('funcionarios')}
+                    className={getAbaClassName('/consultar-paciente')}
+                    onClick={() => navigate('/consultar-paciente')}
                 >
                     👥 Funcionários
                 </button>
                 <button
-                    className={getAbaClassName('alergias')}
-                    onClick={() => setAbaAtiva('alergias')}
+                    className={getAbaClassName('/alergias')}
+                    onClick={() => navigate('/alergias')}
                 >
                     ⚠️ Alergias
                 </button>
                 <button
-                    className={getAbaClassName('atestados')}
-                    onClick={() => setAbaAtiva('atestados')}
+                    className={getAbaClassName('/atestados')}
+                    onClick={() => navigate('/atestados')}
                 >
                     📄 Atestados
                 </button>
@@ -43,7 +46,7 @@ function Sidebar({ abaAtiva, setAbaAtiva, onLogout }) {
                 <button className="btn-sair" onClick={onLogout}>Sair do Sistema</button>
             </div>
         </aside>
-    );
+    )
 }
 
-export default Sidebar;
+export default Sidebar
