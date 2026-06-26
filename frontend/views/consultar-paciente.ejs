@@ -6,14 +6,13 @@
 </head>
 
 <body class="bg-cinzaFundo flex min-h-screen overflow-hidden text-cinzaTexto">
-
     <%- include('partials/sidebar') %>
 
         <main class="flex-1 p-8 overflow-y-auto w-full">
-
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-slate-800 mb-1">Buscar Paciente</h1>
-                <p class="text-slate-500 text-sm">Pesquise por nome, matrícula ou CPF para iniciar o atendimento.</p>
+                <p class="text-slate-500 text-sm">Pesquise por nome, matrícula ou CPF para iniciar o atendimento ou
+                    gerenciar cadastros.</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
@@ -27,7 +26,7 @@
                     </div>
                     <button type="submit"
                         class="bg-azulEscuro hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-                        Buscar Ficha
+                        Buscar
                     </button>
                 </form>
             </div>
@@ -41,22 +40,62 @@
                                 <th class="py-4 px-6 font-semibold">Matrícula</th>
                                 <th class="py-4 px-6 font-semibold">Nome do Funcionário</th>
                                 <th class="py-4 px-6 font-semibold">Cargo / Setor</th>
-                                <th class="py-4 px-6 font-semibold text-center">Ação</th>
+                                <th class="py-4 px-6 font-semibold text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaPacientes" class="divide-y divide-slate-100">
                             <tr>
                                 <td colspan="4" class="py-12 text-center text-slate-400">
                                     <i data-lucide="users" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-                                    <p>Utilize a barra acima para procurar um paciente no sistema.</p>
+                                    <p>Utilize a barra acima para procurar um funcionário no sistema.</p>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </main>
+
+        <div id="modal-editar-paciente"
+            class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-azulEscuro flex items-center gap-2">
+                        <i data-lucide="user-cog" class="w-6 h-6"></i> Editar Funcionário
+                    </h2>
+                    <button onclick="fecharModalEditar()" class="text-gray-400 hover:text-red-500">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <form id="form-editar-paciente" class="space-y-4">
+                    <input type="hidden" id="edit-matricula">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700">Nome Completo</label>
+                        <input type="text" id="edit-nome"
+                            class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                            required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700">Setor</label>
+                            <input type="text" id="edit-setor"
+                                class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700">Cargo</label>
+                            <input type="text" id="edit-cargo"
+                                class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-azulEscuro text-white font-bold py-3 rounded-xl mt-4 hover:bg-blue-800 transition-all">
+                        Guardar Alterações
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <script>
             lucide.createIcons();

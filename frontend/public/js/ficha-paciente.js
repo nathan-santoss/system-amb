@@ -1,110 +1,56 @@
-function abrirModal() {
+// CONTROLE DO MODAL DE ALERGIA
+function abrirModalAlergia() {
     document.getElementById('modal-backdrop').classList.remove('hidden');
-    lucide.createIcons();
+    document.getElementById('modal-backdrop').classList.add('flex');
 }
 
-function fecharModal() {
+function fecharModalAlergia() {
     document.getElementById('modal-backdrop').classList.add('hidden');
+    document.getElementById('modal-backdrop').classList.remove('flex');
     document.getElementById('descricao_alergia').value = '';
 }
 
-function abrirModalEditar() {
-    const modal = document.getElementById('modal-editar-paciente');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+// 1. CARREGAR OS DADOS QUANDO A PÁGINA ABRE
+document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const matricula = params.get('matricula');
 
-    // Preenche o formulário com os dados que estão na tela
-    document.getElementById('edit-nome').value = document.getElementById('nome-paciente').innerText;
-    document.getElementById('edit-setor').value = document.getElementById('setor-paciente').innerText;
-    document.getElementById('edit-cargo').value = document.getElementById('cargo-paciente').innerText;
-}
-
-function fecharModalEditar() {
-    const modal = document.getElementById('modal-editar-paciente');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-
-// Lógica de salvamento via PATCH
-document.getElementById('form-editar-paciente').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    // Assume que a URL termina com a matrícula/id do paciente
-    const idPaciente = window.location.pathname.split('/').pop();
-
-    const dados = {
-        nome: document.getElementById('edit-nome').value,
-        setor: document.getElementById('edit-setor').value,
-        cargo: document.getElementById('edit-cargo').value
-    };
-
-    try {
-        const resposta = await fetch(`http://localhost:3000/api/funcionarios/${idPaciente}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
-        });
-
-        if (resposta.ok) {
-            window.location.reload(); // Recarrega para refletir a edição
-        } else {
-            const erro = await resposta.json();
-            alert('Erro ao atualizar: ' + (erro.mensagem || 'Falha no servidor'));
-        }
-    } catch (err) {
-        console.error('Erro na requisição:', err);
-        alert('Erro ao conectar com o servidor.');
+    if (!matricula) {
+        alert("Nenhum paciente selecionado!");
+        window.location.href = '/consultar-paciente';
+        return;
     }
-})
 
-function abrirModalEditar() {
-    document.getElementById('modal-editar-paciente').classList.remove('hidden');
-    document.getElementById('modal-editar-paciente').classList.add('flex');
-
-    document.getElementById('edit-nome').value = document.getElementById('nome-paciente').innerText;
-    document.getElementById('edit-setor').value = document.getElementById('setor-paciente').innerText;
-    document.getElementById('edit-cargo').value = document.getElementById('cargo-paciente').innerText;
-}
-
-function fecharModalEditar() {
-    document.getElementById('modal-editar-paciente').classList.add('hidden');
-    document.getElementById('modal-editar-paciente').classList.remove('flex');
-}
-
-document.getElementById('form-editar-paciente').addEventListener('submit', async (e) => {
-    e.preventDefault();
     const token = localStorage.getItem('token');
-    const idPaciente = window.location.pathname.split('/').pop();
-
-    const dados = {
-        nome: document.getElementById('edit-nome').value,
-        setor: document.getElementById('edit-setor').value,
-        cargo: document.getElementById('edit-cargo').value
-    };
 
     try {
-        const resposta = await fetch(`http://localhost:3000/funcionarios/${idPaciente}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(dados)
+        // Busca info do paciente
+        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (resposta.ok) {
-            window.location.reload();
+            const paciente = await resposta.json();
+
+            // Pinta as informações no cabeçalho
+            document.getElementById('info-nome').textContent = paciente.nome || 'Não informado';
+            document.getElementById('info-matricula').textContent = `Matrícula: ${paciente.matricula}`;
+            document.getElementById('info-cargo').textContent = paciente.cargo || 'Não informado';
+            document.getElementById('info-setor').textContent = paciente.setor || 'Não informado';
+
+            // Chama as alergias
+            carregarAlergias(matricula, token);
         } else {
-            alert('Erro ao atualizar dados.');
+            alert("Erro ao buscar dados do paciente.");
+            window.location.href = '/consultar-paciente';
         }
     } catch (erro) {
         console.error(erro);
+        alert("Falha na conexão com o servidor.");
     }
 });
 
+// 2. LÓGICA DAS ALERGIAS
 async function carregarAlergias(matricula, token) {
     try {
         const resposta = await fetch(`http://localhost:3000/alergias?funcionario_matricula=${matricula}`, {
@@ -117,20 +63,21 @@ async function carregarAlergias(matricula, token) {
             const lista = document.getElementById('lista-alergias');
 
             if (alergias.length === 0) {
-                lista.innerHTML = `<li class="flex items-center gap-2 text-slate-500"><i data-lucide="info" class="w-4 h-4"></i> Nenhuma cadastrada.</li>`;
+                lista.innerHTML = `<li class="flex items-center gap-2 text-slate-500 py-2"><i data-lucide="info" class="w-4 h-4"></i> Nenhuma relatada.</li>`;
                 lucide.createIcons();
                 return;
             }
 
             lista.innerHTML = alergias.map(alergia => {
                 const id = alergia.id_alergia || alergia.id;
+                const descricao = alergia.descricao_alergia || alergia.descricao || alergia.nome;
                 return `
-                <li class="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-red-100 text-red-700 font-medium group transition-all hover:shadow-sm">
+                <li class="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-red-100 text-red-700 font-medium group transition-all shadow-sm">
                     <div class="flex items-center gap-2">
                         <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
-                        <span>${alergia.descricao_alergia || alergia.descricao || allergy.nome}</span>
+                        <span>${descricao}</span>
                     </div>
-                    <button onclick="excluirAlergia(${id})" class="text-red-300 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="Remover alergia">
+                    <button onclick="excluirAlergia(${id})" class="text-red-300 hover:text-red-600 transition-colors p-1" title="Remover alergia">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </li>
@@ -143,9 +90,33 @@ async function carregarAlergias(matricula, token) {
     }
 }
 
+document.getElementById('formAlergia').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    const matricula = params.get('matricula');
+    const token = localStorage.getItem('token');
+    const descricao = document.getElementById('descricao_alergia').value;
+
+    try {
+        const resposta = await fetch('http://localhost:3000/alergias', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ funcionario_matricula: matricula, descricao_alergia: descricao })
+        });
+
+        if (resposta.ok) {
+            fecharModalAlergia();
+            carregarAlergias(matricula, token);
+        } else {
+            alert("Erro ao salvar alergia.");
+        }
+    } catch (erro) {
+        console.error(erro);
+    }
+});
+
 window.excluirAlergia = async function (idAlergia) {
     if (!confirm("Tem certeza que deseja remover esta alergia do prontuário?")) return;
-
     const token = localStorage.getItem('token');
     const params = new URLSearchParams(window.location.search);
     const matricula = params.get('matricula');
@@ -163,82 +134,12 @@ window.excluirAlergia = async function (idAlergia) {
         }
     } catch (erro) {
         console.error(erro);
-        alert("Falha na conexão ao tentar remover a alergia.");
     }
 }
 
-document.getElementById('formAlergia').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const params = new URLSearchParams(window.location.search);
-    const matricula = params.get('matricula');
-    const token = localStorage.getItem('token');
-    const descricao = document.getElementById('descricao_alergia').value;
-
-    try {
-        const resposta = await fetch('http://localhost:3000/alergias', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                funcionario_matricula: matricula,
-                descricao_alergia: descricao
-            })
-        });
-
-        if (resposta.ok) {
-            fecharModal();
-            carregarAlergias(matricula, token);
-        } else {
-            alert("Erro ao salvar alergia.");
-        }
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro de conexão ao salvar alergia.");
-    }
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const params = new URLSearchParams(window.location.search);
-    const matricula = params.get('matricula');
-
-    if (!matricula) {
-        alert("Nenhum paciente selecionado!");
-        window.location.href = '/consultar-paciente';
-        return;
-    }
-
-    const token = localStorage.getItem('token');
-
-    try {
-        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (resposta.ok) {
-            const paciente = await resposta.json();
-
-            document.getElementById('info-nome').textContent = paciente.nome || 'Não informado';
-            document.getElementById('info-matricula').textContent = `Matrícula: ${paciente.matricula}`;
-            document.getElementById('info-cargo').textContent = paciente.cargo || 'Não informado';
-            document.getElementById('info-setor').textContent = paciente.setor || 'Não informado';
-            document.getElementById('info-supervisor').textContent = paciente.supervisor || 'Não informado';
-
-            carregarAlergias(matricula, token);
-        } else {
-            alert("Erro ao buscar dados do paciente.");
-        }
-    } catch (erro) {
-        console.error(erro);
-        alert("Falha na conexão com o servidor.");
-    }
-});
-
+// 3. LÓGICA DE SALVAR O ATENDIMENTO / TRIAGEM
 document.getElementById('formTriagem').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const params = new URLSearchParams(window.location.search);
 
     const dadosTriagem = {
@@ -261,14 +162,14 @@ document.getElementById('formTriagem').addEventListener('submit', async (e) => {
         });
 
         if (resposta.ok) {
-            alert("Triagem salva com sucesso!");
+            alert("Atendimento registrado com sucesso!");
             window.location.href = '/dashboard';
         } else {
             const erro = await resposta.json();
-            alert("Erro ao salvar: " + (erro.erro || "Verifique os campos."));
+            alert("Erro ao salvar: " + (erro.erro || "Verifique os dados."));
         }
     } catch (erro) {
         console.error(erro);
-        alert("Falha na conexão com o servidor ao tentar salvar.");
+        alert("Falha na conexão com o servidor ao tentar salvar a triagem.");
     }
 });

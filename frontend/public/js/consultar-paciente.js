@@ -1,24 +1,23 @@
 document.getElementById('formBusca').addEventListener('submit', async (e) => {
     e.preventDefault();
+    buscarDados();
+});
 
+async function buscarDados() {
     const termo = document.getElementById('inputBusca').value;
     const tabela = document.getElementById('tabelaPacientes');
 
-    // Mostra que está a carregar
     tabela.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-500"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto"></i></td></tr>`;
     lucide.createIcons();
 
     try {
         const token = localStorage.getItem('token');
-
-        // No teu Back-end já deixámos a rota pronta para buscar funcionários
         const url = termo ? `http://localhost:3000/funcionarios?busca=${termo}` : `http://localhost:3000/funcionarios`;
 
         const resposta = await fetch(url, {
-            headers: { 'Authorization': `Bearer ${token}` } // Apresenta o token
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        // Se o token estiver expirado, enviar para o login
         if (resposta.status === 401 || resposta.status === 403) {
             alert("A sua sessão expirou. Por favor, faça login novamente.");
             fazerLogout();
@@ -27,13 +26,12 @@ document.getElementById('formBusca').addEventListener('submit', async (e) => {
 
         const dados = await resposta.json();
 
-        // Se não encontrar ninguém
         if (dados.length === 0) {
-            tabela.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-vermelhoAlerta font-medium">Nenhum paciente encontrado com esse termo.</td></tr>`;
+            tabela.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-vermelhoAlerta font-medium">Nenhum paciente encontrado.</td></tr>`;
             return;
         }
 
-        // Se encontrar, desenha a tabela
+        // Tabela com botões divididos (Clínico vs Admin)
         tabela.innerHTML = dados.map(paciente => `
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="py-4 px-6 font-medium text-slate-700">${paciente.matricula}</td>
@@ -45,18 +43,101 @@ document.getElementById('formBusca').addEventListener('submit', async (e) => {
                     </span>
                 </td>
                 <td class="py-4 px-6 text-center">
-                    <a href="/ficha-paciente?matricula=${paciente.matricula}" 
-                       class="inline-flex items-center gap-2 bg-vermelhoAlerta hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-all text-sm">
-                        <i data-lucide="folder-open" class="w-4 h-4"></i> Abrir Prontuário
-                    </a>
+                    <div class="flex justify-center items-center gap-2">
+                        <a href="/ficha-paciente?matricula=${paciente.matricula}" 
+                           class="inline-flex items-center gap-2 bg-azulEscuro hover:bg-blue-800 text-white font-semibold py-2 px-3 rounded-lg shadow-sm transition-all text-sm" title="Abrir Prontuário">
+                            <i data-lucide="folder-open" class="w-4 h-4"></i> Prontuário
+                        </a>
+                        <button onclick="abrirModalEditar('${paciente.matricula}', '${paciente.nome}', '${paciente.setor}', '${paciente.cargo}')" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-lg transition-all" title="Editar Funcionário">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deletarPaciente('${paciente.matricula}')" 
+                                class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg transition-all" title="Excluir Funcionário">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `).join('');
 
-        lucide.createIcons(); // Recarrega os ícones nos novos botões desenhados
+        lucide.createIcons();
 
     } catch (erro) {
         console.error("Erro:", erro);
         tabela.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-red-500">Erro ao comunicar com o servidor.</td></tr>`;
+    }
+}
+
+// LÓGICA DE EXCLUSÃO
+async function deletarPaciente(matricula) {
+    if (!confirm(`Atenção: Tem certeza que deseja remover o funcionário da matrícula ${matricula}?\nTodos os registros dele serão perdidos.`)) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (resposta.ok) {
+            alert("Funcionário excluído com sucesso!");
+            buscarDados(); // Recarrega a tabela
+        } else {
+            alert("Erro ao excluir o funcionário.");
+        }
+    } catch (erro) {
+        console.error(erro);
+        alert("Falha na conexão ao tentar excluir.");
+    }
+}
+
+// LÓGICA DE EDIÇÃO
+function abrirModalEditar(matricula, nome, setor, cargo) {
+    const modal = document.getElementById('modal-editar-paciente');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    document.getElementById('edit-matricula').value = matricula;
+    document.getElementById('edit-nome').value = nome;
+    document.getElementById('edit-setor').value = setor;
+    document.getElementById('edit-cargo').value = cargo;
+}
+
+function fecharModalEditar() {
+    const modal = document.getElementById('modal-editar-paciente');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+document.getElementById('form-editar-paciente').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const matricula = document.getElementById('edit-matricula').value;
+
+    const dados = {
+        nome: document.getElementById('edit-nome').value,
+        setor: document.getElementById('edit-setor').value,
+        cargo: document.getElementById('edit-cargo').value
+    };
+
+    try {
+        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+
+        if (resposta.ok) {
+            fecharModalEditar();
+            buscarDados(); // Recarrega a tabela para ver a alteração
+        } else {
+            alert('Erro ao atualizar dados.');
+        }
+    } catch (erro) {
+        console.error(erro);
     }
 });
