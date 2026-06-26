@@ -29,11 +29,6 @@ app.get('/ficha-paciente', (req, res) => {
     res.render('ficha-paciente'); 
 });
 
-app.get('/logout', (req, res) => {
-    res.render('login'); 
-});
-
-
 app.listen(PORT, () => {
     console.log(`Servidor de Interface (EJS) a correr na porta ${PORT}`);
 });

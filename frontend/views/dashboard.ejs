@@ -71,11 +71,10 @@
         </main>
 
         <script>
-            async function fazerLogout() {
+            function fazerLogout() {
+                
                 localStorage.removeItem('token');
-                await fetch('http://localhost:3000/logout', {
-                    method: 'GET'
-                })
+                window.location.href = '/';
             }
 
             async function carregarDashboard() {
