@@ -2,7 +2,7 @@ import express from 'express'
 
 import {
     cadastrarFuncionario,
-    buscarPacientes,
+    buscarFuncionarios,
     atualizarFuncionario,
     deletarFuncionario,
     buscarFuncionarioPorMatricula
@@ -12,7 +12,7 @@ import { verificarToken } from '../middlewares/authMiddleware.js'
 const router = express.Router()
 
 router.post(`/funcionarios`, verificarToken, cadastrarFuncionario)
-router.get(`/funcionarios`, verificarToken, buscarPacientes)
+router.get(`/funcionarios`, verificarToken, buscarFuncionarios)
 
 router.put(`/funcionarios/:matricula`, verificarToken, atualizarFuncionario)
 router.patch(`/funcionarios/:matricula`, verificarToken, atualizarFuncionario)

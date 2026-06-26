@@ -1,11 +1,12 @@
-// src/pages/Dashboard.jsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layouts/DashboardLayout';
 import { Activity, Plus, MousePointerClick, HeartPulse, ClipboardList, UserCheck, CalendarCheck, ListVideo, BarChart3, Clock, Gauge, Thermometer, X } from 'lucide-react';
 
 export default function Dashboard() {
     const [isObservationModalOpen, setIsObservationModalOpen] = useState(false);
     let observationModalContent = null;
+    const navigate = useNavigate();
     if (isObservationModalOpen) {
         observationModalContent = (
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -66,7 +67,10 @@ export default function Dashboard() {
                         </h3>
                         <p className="text-sm text-blue-100 mt-1 font-medium">O monitoramento clínico está a correr. Inicie um novo atendimento rapidamente.</p>
                     </div>
-                    <button className="bg-white text-azulEscuro hover:bg-slate-50 px-5 py-2.5 rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0 transform hover:scale-105">
+                    <button
+                        onClick={() => navigate('/consultar-paciente')}
+                        className="bg-white text-azulEscuro hover:bg-slate-50 px-5 py-2.5 rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0 transform hover:scale-105"
+                    >
                         <Plus className="w-4 h-4 border-2 border-azulEscuro rounded-full flex items-center justify-center p-0.5" />
                         <span>Nova Triagem Rápida</span>
                     </button>

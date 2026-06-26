@@ -59,14 +59,14 @@ export default function ConsultarPaciente() {
         } finally {
             setCarregando(false);
         }
-    }, [pesquisa]); // 'pesquisa' é uma dependência para que a função seja recriada quando o valor de pesquisa mudar
+    }, [pesquisa]);
 
     useEffect(() => {
         async function carregarPacientes() {
             await buscarPacientes();
         }
         carregarPacientes();
-    }, [buscarPacientes]); // 'buscarPacientes' agora é uma dependência estável graças ao useCallback
+    }, [buscarPacientes]);
 
     function handleSearch(e) {
         e.preventDefault();
@@ -232,7 +232,7 @@ export default function ConsultarPaciente() {
 
                         <input
                             type="text"
-                            placeholder="Pesquise por nome, CPF ou matrícula..."
+                            placeholder="Pesquise por nome ou matrícula..."
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-azulEscuro focus:ring-2 focus:ring-azulEscuro/20 transition-all"
                             value={pesquisa}
                             onChange={(e) => {
@@ -243,7 +243,9 @@ export default function ConsultarPaciente() {
                             <Search className="w-5 h-5" />
                         </span>
                     </form>
-                    <button className="bg-azulEscuro hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center justify-center gap-2 flex-shrink-0">
+                    <button
+                        onClick={() => navigate('/cadastrar-paciente')}
+                        className="bg-azulEscuro hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center justify-center gap-2 flex-shrink-0">
                         <UserPlus className="w-4 h-4" />
                         <span>
                             Cadastrar Funcionário

@@ -38,6 +38,11 @@ export default function FichaPaciente() {
         const { name, value } = e.target;
         setTriagem(prev => ({ ...prev, [name]: value }));
     }
+
+    async function handleRegistrarAtendimento() {
+        console.log("Registrando atendimento:", triagem);
+        alert("Funcionalidade de registrar atendimento ainda não implementada.");
+    }
     if (carregando) {
         return (
             <DashboardLayout titulo="Prontuário Médico" subtitulo="A aceder à base Nexa Logos...">
@@ -122,7 +127,9 @@ export default function FichaPaciente() {
                                     ></textarea>
                                 </div>
                                 <div className="flex justify-end pt-2">
-                                    <button className="bg-azulEscuro hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center gap-2">
+                                    <button
+                                        onClick={handleRegistrarAtendimento}
+                                        className="bg-azulEscuro hover:bg-blue-800 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-blue-900/10 transition-all flex items-center gap-2">
                                         <Save className="w-4 h-4" />
                                         Registrar Atendimento
                                     </button>
@@ -137,7 +144,11 @@ export default function FichaPaciente() {
                                     <AlertCircle className="w-5 h-5 text-red-500" />
                                     <h3 className="font-bold text-slate-700 text-sm">Alergias Conhecidas</h3>
                                 </div>
-                                <button className="text-red-600 hover:bg-red-100 p-1 rounded transition-colors" title="Adicionar Alergia">
+                                <button
+                                    onClick={() => alert('Funcionalidade para adicionar alergia não implementada.')}
+                                    className="text-red-600 hover:bg-red-100 p-1 rounded transition-colors"
+                                    title="Adicionar Alergia"
+                                >
                                     <Plus className="w-4 h-4" />
                                 </button>
                             </div>

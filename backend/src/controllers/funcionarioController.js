@@ -14,25 +14,23 @@ export async function cadastrarFuncionario(req, res) {
 }
 
 // buscar funcionários (com ou sem filtro de pesquisa)
-export async function buscarPacientes() {
-    setCarregando(true);
-    setErro('');
-
+export async function buscarFuncionarios(req, res) {
     try {
-        // 1. Definimos apenas o final da rota (o api.js já sabe que é localhost:3000)
-        const url = pesquisa ? `/funcionarios?busca=${pesquisa}` : `/funcionarios`;
+        const { busca } = req.query;
+        const where = {};
 
-        // 2. Fazemos o pedido! (O api.js envia o Token automaticamente)
-        const resposta = await api.get(url);
+        if (busca) {
+            where[Op.or] = [
+                { nome: { [Op.like]: `%${busca}%` } },
+                { matricula: { [Op.like]: `%${busca}%` } }
+            ];
+        }
 
-        // 3. Guardamos os dados
-        setPacientes(resposta.data);
+        const funcionarios = await Funcionario.findAll({ where });
+        res.status(200).json(funcionarios);
 
     } catch (erro) {
-        console.error("Erro ao procurar pacientes:", erro);
-        setErro('Não foi possível carregar a lista.');
-    } finally {
-        setCarregando(false);
+        res.status(500).json({ erro: erro.message });
     }
 }
 
