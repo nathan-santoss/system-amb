@@ -25,16 +25,48 @@ async function carregarAlergias(matricula, token) {
                 return;
             }
 
-            lista.innerHTML = alergias.map(alergia => `
-                <li class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-red-100 text-red-700 font-medium">
-                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
-                    <span>${alergia.descricao_alergia || alergia.descricao || alergia.nome}</span>
+            lista.innerHTML = alergias.map(alergia => {
+                const id = alergia.id_alergia || alergia.id;
+                return `
+                <li class="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-red-100 text-red-700 font-medium group transition-all hover:shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+                        <span>${alergia.descricao_alergia || alergia.descricao || allergy.nome}</span>
+                    </div>
+                    <button onclick="excluirAlergia(${id})" class="text-red-300 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="Remover alergia">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
                 </li>
-            `).join('');
+                `;
+            }).join('');
             lucide.createIcons();
         }
     } catch (erro) {
         console.error(erro);
+    }
+}
+
+window.excluirAlergia = async function (idAlergia) {
+    if (!confirm("Tem certeza que deseja remover esta alergia do prontuário?")) return;
+
+    const token = localStorage.getItem('token');
+    const params = new URLSearchParams(window.location.search);
+    const matricula = params.get('matricula');
+
+    try {
+        const resposta = await fetch(`http://localhost:3000/alergias/${idAlergia}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (resposta.ok) {
+            carregarAlergias(matricula, token);
+        } else {
+            alert("Erro ao remover a alergia no servidor.");
+        }
+    } catch (erro) {
+        console.error(erro);
+        alert("Falha na conexão ao tentar remover a alergia.");
     }
 }
 
