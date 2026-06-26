@@ -1,23 +1,27 @@
-import express from 'express'
+import express from 'express';
 
 import {
     registrarAtendimento,
     buscarAtendimentosPorFuncionario,
     atualizarAtendimento,
     deletarAtendimento,
-    contarAtendimentosHoje
-} from '../controllers/atendimentoController.js'
-import { verificarToken } from '../middlewares/authMiddleware.js'
+    contarAtendimentosHoje,
+    obterDadosDashboard
+} from '../controllers/atendimentoController.js';
 
-const router = express.Router()
+import { verificarToken } from '../middlewares/authMiddleware.js';
 
-router.post(`/atendimentos`, verificarToken, registrarAtendimento)
-router.get(`/atendimentos/:matricula`, verificarToken, buscarAtendimentosPorFuncionario)
+const router = express.Router();
 
-router.put(`/atendimentos/:id`, verificarToken, atualizarAtendimento)
-router.patch(`/atendimentos/:id`, verificarToken, atualizarAtendimento)
+// Rotas de Atendimentos 
+router.post('/atendimentos', verificarToken, registrarAtendimento);
+router.get('/atendimentos/:matricula', verificarToken, buscarAtendimentosPorFuncionario);
+router.put('/atendimentos/:id', verificarToken, atualizarAtendimento);
+router.patch('/atendimentos/:id', verificarToken, atualizarAtendimento);
+router.delete('/atendimentos/:id', verificarToken, deletarAtendimento);
 
-router.delete(`/atendimentos/:id`, verificarToken, deletarAtendimento)
-
+// Rotas do Dashboard
 router.get('/contagem-hoje', verificarToken, contarAtendimentosHoje);
-export default router
+router.get('/dashboard-dados', verificarToken, obterDadosDashboard); 
+
+export default router;

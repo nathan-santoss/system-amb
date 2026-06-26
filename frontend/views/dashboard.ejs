@@ -3,58 +3,109 @@
 
 <head>
     <%- include('partials/head') %>
+        <title>Dashboard - Sistema Ambulatório</title>
 </head>
 
 <body class="bg-cinzaFundo flex min-h-screen overflow-hidden text-cinzaTexto">
 
     <%- include('partials/sidebar') %>
 
-        <main class="flex-1 p-8 overflow-y-auto w-full">
-
-            <div class="flex justify-between items-end mb-8">
+        <main class="flex-1 p-8 overflow-y-auto">
+            <header class="flex justify-between items-center mb-8">
                 <div>
-                    <h1 class="text-3xl font-bold text-slate-800 mb-1">Painel de Gestão</h1>
-                    <p class="text-slate-500 text-sm">Resumo do turno atual e acessos rápidos.</p>
+                    <h1 class="text-3xl font-bold text-azulEscuro">Painel do Ambulatório</h1>
+                    <p class="text-gray-500 mt-1">Resumo das atividades e estatísticas de hoje.</p>
                 </div>
-                <div
-                    class="flex items-center gap-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 hidden sm:flex">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-azulEscuro">
-                        <i data-lucide="user"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-bold text-slate-700">Enf. Responsável</p>
-                        <p class="text-xs text-slate-400">Turno Padrão</p>
-                    </div>
-                </div>
-            </div>
+                <button onclick="fazerLogout()"
+                    class="bg-vermelhoAlerta hover:bg-red-800 text-white px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm">
+                    Sair
+                </button>
+            </header>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative overflow-hidden">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-slate-500 font-medium text-sm mb-1">Atendimentos Hoje</p>
-                            <h3 class="text-4xl font-bold text-azulEscuro">0</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-azulEscuro">
-                            <i data-lucide="activity"></i>
-                        </div>
-                    </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-azulEscuro flex flex-col justify-between">
+                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Atendimentos Hoje</h2>
+                    <h3 id="contador-hoje" class="text-4xl font-bold text-azulEscuro">...</h3>
+                </div>
+
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-vermelhoAlerta flex flex-col justify-between">
+                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Casos Graves (Hoje)</h2>
+                    <h3 id="contador-graves" class="text-4xl font-bold text-vermelhoAlerta">...</h3>
+                </div>
+
+                <div class="bg-azulEscuro hover:bg-blue-800 transition-colors p-6 rounded-xl shadow-sm flex items-center justify-center cursor-pointer"
+                    onclick="window.location.href='/consultar-paciente'">
+                    <h2 class="text-lg font-bold text-white uppercase tracking-wider text-center">+ Nova Triagem Rápida
+                    </h2>
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
+                    <h3 class="text-xl font-bold text-azulEscuro mb-4">Últimos Atendimentos</h3>
+                    <div id="lista-ultimos-atendimentos" class="text-sm text-gray-400 italic">
+                        Carregando listagem do servidor...
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-azulEscuro mb-4">Ranking de Setores</h3>
+                    <div id="lista-setores" class="text-sm text-gray-400 italic">
+                        Calculando dados do mês...
+                    </div>
+                </div>
+            </div>
         </main>
 
         <script>
-            lucide.createIcons();
-            if (!localStorage.getItem('token')) {
-                window.location.href = '/';
-            }
-
-            // Função de Sair
+            // 1. Desconectar o usuário
             function fazerLogout() {
                 localStorage.removeItem('token');
-                window.location.href = '/';
+                window.location.href = '/login';
             }
+
+            // 2. Buscar dados da API
+            async function carregarDashboard() {
+                const token = localStorage.getItem('token');
+
+                // Segurança: Se não houver crachá (token), expulsa para a tela de login
+                if (!token) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                try {
+                    // Solicita o pacote de dados à nossa rota
+                    const resposta = await fetch('http://localhost:3000/dashboard-dados', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!resposta.ok) {
+                        throw new Error('Falha ao obter as estatísticas do servidor.');
+                    }
+
+                    // Recebemos a resposta e transformamos em JSON
+                    const dados = await resposta.json();
+
+                    // Atualizamos a tela (O "Alvo") com os números reais
+                    document.getElementById('contador-hoje').innerText = dados.totalHoje;
+                    document.getElementById('contador-graves').innerText = dados.gravidadeHoje.alta || 0;
+
+                } catch (erro) {
+                    console.error("Erro de comunicação:", erro);
+                    document.getElementById('contador-hoje').innerText = "Erro";
+                    document.getElementById('contador-graves').innerText = "Erro";
+                }
+            }
+
+            // 3. Gatilho de Inicialização
+            document.addEventListener('DOMContentLoaded', carregarDashboard);
         </script>
 </body>
 
