@@ -6,8 +6,7 @@
   "description": "Servidor unificado para o sistema AMB",
   "main": "backend/server.js",
   "scripts": {
-    "start": "concurrently \"node backend/server.js\" \"node frontend/server.js\"",
-    "dev": "concurrently \"node backend/server.js\" \"nodem frontend/server.js\""
+    "start": "concurrently \"node backend/server.js\" \"node frontend/server.js\""
   },
   "dependencies": {
     "cors": "^2.8.5",
