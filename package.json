@@ -2,11 +2,23 @@
   "name": "system-amb-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "Gerenciador para iniciar backend e frontend simultaneamente.",
+  "type": "module",
+  "description": "Servidor unificado para o sistema AMB",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "npm start --prefix backend",
-    "postinstall": "npm install --prefix backend && npm install --prefix frontend"
+    "start": "concurrently \"node backend/server.js\" \"node frontend/server.js\"",
+    "dev": "concurrently \"node backend/server.js\" \"nodem frontend/server.js\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mysql2": "^3.9.7",
+    "sequelize": "^6.37.3"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.1"
   }
 }
