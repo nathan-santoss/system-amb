@@ -77,12 +77,11 @@
             }
 
             async function carregarDashboard() {
-                const BASE_URL = "https://nexa-logos.onrender.com";
                 const token = localStorage.getItem('token');
                 if (!token) { window.location.href = '/login'; return; }
 
                 try {
-                    const resposta = await fetch(`${BASE_URL}/dashboard-dados`, {
+                    const resposta = await fetch('https://nexa-logos.onrender.com/dashboard-dados', {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
                     });
@@ -91,26 +90,26 @@
 
                     document.getElementById('contador-hoje').innerText = dados.totalHoje;
 
-                    document.getElementById('count-normal').innerText = dados.gravidadeHoje ? dados.gravidadeHoje.baixa : (dados.severidade ? dados.severidade.normal : 0);
-                    document.getElementById('count-medio').innerText = dados.gravidadeHoje ? dados.gravidadeHoje.media : (dados.severidade ? dados.severidade.medio : 0);
-                    document.getElementById('count-grave').innerText = dados.gravidadeHoje ? dados.gravidadeHoje.alta : (dados.severidade ? dados.severidade.grave : 0);
+                    document.getElementById('count-normal').innerText = dados.severidade ? dados.severidade.normal : 0;
+                    document.getElementById('count-medio').innerText = dados.severidade ? dados.severidade.medio : 0;
+                    document.getElementById('count-grave').innerText = dados.severidade ? dados.severidade.grave : 0;
 
                     const tabela = document.getElementById('lista-ultimos-atendimentos');
-                    const ultimos = dados.ultimosAtendimentos || dados.ultimos || [];
+                    const ultimos = dados.ultimos || [];
                     tabela.innerHTML = ultimos.map(a => `
                         <tr class="border-b">
                             <td class="py-3">${a.nome}</td>
-                            <td class="text-center">${a.gravidade || a.severidade}</td>
-                            <td class="text-center">${a.data || 'Hoje'}</td>
+                            <td class="text-center">${a.severidade}</td>
+                            <td class="text-center">${a.data}</td>
                         </tr>
                     `).join('');
 
                     const setoresDiv = document.getElementById('lista-setores');
-                    const setoresData = dados.atendimentosPorSetor || dados.setores || [];
+                    const setoresData = dados.setores || [];
                     setoresDiv.innerHTML = setoresData.map(s => `
                         <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
-                            <span>${s.setor || s.nome}</span>
-                            <span class="font-bold text-azulEscuro">${s.quantidade || s.total}</span>
+                            <span>${s.nome}</span>
+                            <span class="font-bold text-azulEscuro">${s.total}</span>
                         </div>
                     `).join('');
                 } catch (erro) {

@@ -17,9 +17,10 @@
     "mysql2": "^3.9.7",
     "sequelize": "^6.37.3",
     "bcryptjs": "^3.0.3",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "concurrently": "^8.2.2"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    
   }
 }
