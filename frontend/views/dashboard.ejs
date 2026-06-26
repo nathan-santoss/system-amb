@@ -31,8 +31,12 @@
 
                 <div
                     class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-vermelhoAlerta flex flex-col justify-between">
-                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Casos Graves (Hoje)</h2>
-                    <h3 id="contador-graves" class="text-4xl font-bold text-vermelhoAlerta">...</h3>
+                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Grave / Médio / Normal
+                    </h2>
+                    <h3 class="text-xl font-bold text-vermelhoAlerta">
+                        <span id="count-grave">0</span> / <span id="count-medio">0</span> / <span
+                            id="count-normal">0</span>
+                    </h3>
                 </div>
 
                 <div class="bg-azulEscuro hover:bg-blue-800 transition-colors p-6 rounded-xl shadow-sm flex items-center justify-center cursor-pointer"
@@ -45,66 +49,76 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
                     <h3 class="text-xl font-bold text-azulEscuro mb-4">Últimos Atendimentos</h3>
-                    <div id="lista-ultimos-atendimentos" class="text-sm text-gray-400 italic">
-                        Carregando listagem do servidor...
-                    </div>
+                    <table class="w-full text-sm">
+                        <thead class="text-gray-500 border-b">
+                            <tr>
+                                <th class="pb-2 text-left">Paciente</th>
+                                <th class="pb-2">Severidade</th>
+                                <th class="pb-2">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-ultimos-atendimentos" class="text-gray-700">
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="text-xl font-bold text-azulEscuro mb-4">Ranking de Setores</h3>
-                    <div id="lista-setores" class="text-sm text-gray-400 italic">
-                        Calculando dados do mês...
+                    <h3 class="text-xl font-bold text-azulEscuro mb-4">Ranking de Setores (Mês)</h3>
+                    <div id="lista-setores" class="space-y-3">
                     </div>
                 </div>
             </div>
         </main>
 
         <script>
-            // 1. Desconectar o usuário
             function fazerLogout() {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
             }
 
-            // 2. Buscar dados da API
             async function carregarDashboard() {
                 const token = localStorage.getItem('token');
-
-                // Segurança: Se não houver crachá (token), expulsa para a tela de login
-                if (!token) {
-                    window.location.href = '/login';
-                    return;
-                }
+                if (!token) { window.location.href = '/login'; return; }
 
                 try {
-                    // Solicita o pacote de dados à nossa rota
                     const resposta = await fetch('http://localhost:3000/dashboard-dados', {
                         method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
                     });
 
-                    if (!resposta.ok) {
-                        throw new Error('Falha ao obter as estatísticas do servidor.');
-                    }
-
-                    // Recebemos a resposta e transformamos em JSON
+                    if (!resposta.ok) throw new Error('Erro ao carregar dados');
                     const dados = await resposta.json();
 
-                    // Atualizamos a tela (O "Alvo") com os números reais
+                    // Atualizar Cards
                     document.getElementById('contador-hoje').innerText = dados.totalHoje;
-                    document.getElementById('contador-graves').innerText = dados.gravidadeHoje.alta || 0;
+                    document.getElementById('count-normal').innerText = dados.severidade.normal || 0;
+                    document.getElementById('count-medio').innerText = dados.severidade.medio || 0;
+                    document.getElementById('count-grave').innerText = dados.severidade.grave || 0;
+
+                    // Atualizar Tabela Últimos Atendimentos
+                    const tabela = document.getElementById('lista-ultimos-atendimentos');
+                    tabela.innerHTML = dados.ultimos.map(a => `
+                        <tr class="border-b">
+                            <td class="py-3">${a.nome}</td>
+                            <td class="text-center">${a.severidade}</td>
+                            <td class="text-center">${a.data}</td>
+                        </tr>
+                    `).join('');
+
+                    // Atualizar Ranking Setores
+                    const setores = document.getElementById('lista-setores');
+                    setores.innerHTML = dados.setores.map(s => `
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <span>${s.nome}</span>
+                            <span class="font-bold text-azulEscuro">${s.total}</span>
+                        </div>
+                    `).join('');
 
                 } catch (erro) {
-                    console.error("Erro de comunicação:", erro);
-                    document.getElementById('contador-hoje').innerText = "Erro";
-                    document.getElementById('contador-graves').innerText = "Erro";
+                    console.error("Erro:", erro);
                 }
             }
 
-            // 3. Gatilho de Inicialização
             document.addEventListener('DOMContentLoaded', carregarDashboard);
         </script>
 </body>
