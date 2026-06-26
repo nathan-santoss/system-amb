@@ -39,7 +39,7 @@ app.use('/auth', authRoutes);
 async function iniciarServidor() {
     while (true) {
         try {
-            await database.sync({ alter: true });
+            await database.sync({ false: false });
 
             console.log("Banco de dados sincronizado com sucesso!");
 
