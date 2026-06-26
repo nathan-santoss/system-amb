@@ -23,6 +23,12 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-6">
+                </div>
+                <div class="space-y-6">
+                </div>
+            </div>
         </main>
 
         <div id="modal-editar-paciente"
@@ -39,22 +45,26 @@
                 <form id="form-editar-paciente" class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700">Nome Completo</label>
-                        <input type="text" id="edit-nome" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                        <input type="text" id="edit-nome"
+                            class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
                             required>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">Setor</label>
-                            <input type="text" id="edit-setor" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                            <input type="text" id="edit-setor"
+                                class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
                                 required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700">Cargo</label>
-                            <input type="text" id="edit-cargo" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                            <input type="text" id="edit-cargo"
+                                class="w-full px-4 py-2 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none"
                                 required>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-azulEscuro text-white font-bold py-3 rounded-xl mt-4">
+                    <button type="submit"
+                        class="w-full bg-azulEscuro text-white font-bold py-3 rounded-xl mt-4 hover:bg-blue-800 transition-all">
                         Guardar Alterações
                     </button>
                 </form>
@@ -62,6 +72,7 @@
         </div>
 
         <script src="/js/ficha-paciente.js"></script>
+        <script>lucide.createIcons();</script>
 </body>
 
 </html>

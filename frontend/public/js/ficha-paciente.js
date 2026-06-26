@@ -8,7 +8,58 @@ function fecharModal() {
     document.getElementById('descricao_alergia').value = '';
 }
 
-// Funções de Modal
+function abrirModalEditar() {
+    const modal = document.getElementById('modal-editar-paciente');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    // Preenche o formulário com os dados que estão na tela
+    document.getElementById('edit-nome').value = document.getElementById('nome-paciente').innerText;
+    document.getElementById('edit-setor').value = document.getElementById('setor-paciente').innerText;
+    document.getElementById('edit-cargo').value = document.getElementById('cargo-paciente').innerText;
+}
+
+function fecharModalEditar() {
+    const modal = document.getElementById('modal-editar-paciente');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// Lógica de salvamento via PATCH
+document.getElementById('form-editar-paciente').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    // Assume que a URL termina com a matrícula/id do paciente
+    const idPaciente = window.location.pathname.split('/').pop();
+
+    const dados = {
+        nome: document.getElementById('edit-nome').value,
+        setor: document.getElementById('edit-setor').value,
+        cargo: document.getElementById('edit-cargo').value
+    };
+
+    try {
+        const resposta = await fetch(`http://localhost:3000/api/funcionarios/${idPaciente}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+
+        if (resposta.ok) {
+            window.location.reload(); // Recarrega para refletir a edição
+        } else {
+            const erro = await resposta.json();
+            alert('Erro ao atualizar: ' + (erro.mensagem || 'Falha no servidor'));
+        }
+    } catch (err) {
+        console.error('Erro na requisição:', err);
+        alert('Erro ao conectar com o servidor.');
+    }
+})
+
 function abrirModalEditar() {
     document.getElementById('modal-editar-paciente').classList.remove('hidden');
     document.getElementById('modal-editar-paciente').classList.add('flex');
