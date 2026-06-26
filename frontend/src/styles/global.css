@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  /* Aqui nós "ensinamos" as suas cores personalizadas para o Tailwind v4 */
+  --color-azulEscuro: #004A8F;
+  --color-vermelhoAlerta: #D32F2F;
+  --color-cinzaFundo: #F4F7F6;
+  --color-cinzaTexto: #334155;
+  
+  /* Aqui ensinamos a fonte */
+  --font-sans: 'Inter', sans-serif;
+}

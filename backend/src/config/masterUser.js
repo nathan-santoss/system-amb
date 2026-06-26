@@ -3,6 +3,9 @@ import Funcionario from '../models/funcionarios.js'
 import Usuario from '../models/usuarios.js'
 
 async function criarUsuarioMaster() {
+    const matricula =  '1'
+    const senhaMain = '123456'
+    const email = 'admin@logos123'
     try {
         const usuarioExiste = await Usuario.findOne({ where: { id: 1 } })
 
@@ -12,7 +15,7 @@ async function criarUsuarioMaster() {
             const funcionarioExiste = await Funcionario.findByPk('admin123')
             if (!funcionarioExiste) {
                 await Funcionario.create({
-                    matricula: 'admin123',
+                    matricula: matricula,
                     nome: 'Avaliador',
                     cpf: '00000000000',
                     cargo: 'Chefe',
@@ -21,15 +24,15 @@ async function criarUsuarioMaster() {
             }
 
             const salt = await bcrypt.genSalt(10)
-            const senhaHash = await bcrypt.hash('senha123', salt)
+            const senhaHash = await bcrypt.hash(senhaMain, salt)
 
             await Usuario.create({
                 id: 1,
-                email: 'admin123@12345',
+                email: email,
                 senha: senhaHash
             })
 
-            console.log("Usuário master criado com sucesso! [Matrícula: admin123 | Senha: senha123]")
+            console.log(`Usuário master criado com sucesso! [email: ${email} | Senha: ${senhaMain}`)
         } else {
             console.log("✅ Usuário master já configurado no banco de dados.")
         }

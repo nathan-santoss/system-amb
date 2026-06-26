@@ -24,7 +24,7 @@ function Login() {
                 setErro(dados.erro || 'Credenciais inválidas')
             }
         } catch (err) {
-            setErro('Erro ao conectar com o servidor')
+            setErro('Erro ao conectar com o servidor: ', err.message)
         }
     }
 
