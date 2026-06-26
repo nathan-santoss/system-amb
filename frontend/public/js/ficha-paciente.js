@@ -8,6 +8,52 @@ function fecharModal() {
     document.getElementById('descricao_alergia').value = '';
 }
 
+// Funções de Modal
+function abrirModalEditar() {
+    document.getElementById('modal-editar-paciente').classList.remove('hidden');
+    document.getElementById('modal-editar-paciente').classList.add('flex');
+
+    document.getElementById('edit-nome').value = document.getElementById('nome-paciente').innerText;
+    document.getElementById('edit-setor').value = document.getElementById('setor-paciente').innerText;
+    document.getElementById('edit-cargo').value = document.getElementById('cargo-paciente').innerText;
+}
+
+function fecharModalEditar() {
+    document.getElementById('modal-editar-paciente').classList.add('hidden');
+    document.getElementById('modal-editar-paciente').classList.remove('flex');
+}
+
+document.getElementById('form-editar-paciente').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const idPaciente = window.location.pathname.split('/').pop();
+
+    const dados = {
+        nome: document.getElementById('edit-nome').value,
+        setor: document.getElementById('edit-setor').value,
+        cargo: document.getElementById('edit-cargo').value
+    };
+
+    try {
+        const resposta = await fetch(`http://localhost:3000/funcionarios/${idPaciente}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
+
+        if (resposta.ok) {
+            window.location.reload();
+        } else {
+            alert('Erro ao atualizar dados.');
+        }
+    } catch (erro) {
+        console.error(erro);
+    }
+});
+
 async function carregarAlergias(matricula, token) {
     try {
         const resposta = await fetch(`http://localhost:3000/alergias?funcionario_matricula=${matricula}`, {

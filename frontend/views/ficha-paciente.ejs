@@ -1,162 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <%- include('partials/head') %>
 </head>
 
-<body class="bg-cinzaFundo flex min-h-screen overflow-hidden text-cinzaTexto">
-
+<body class="bg-gray-100 flex">
     <%- include('partials/sidebar') %>
 
-        <main class="flex-1 p-4 sm:p-8 overflow-y-auto w-full">
-            <div class="mb-6 flex justify-between items-end">
+        <main class="flex-1 p-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm mb-6 flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-slate-800 mb-1">Prontuário Médico</h1>
-                    <p class="text-slate-500 text-sm">Preencha os dados da triagem atual.</p>
+                    <h1 class="text-2xl font-bold text-azulEscuro flex items-center gap-3">
+                        <span id="nome-paciente">Nome do Paciente</span>
+                        <button onclick="abrirModalEditar()" class="text-blue-500 hover:text-blue-700 transition-colors"
+                            title="Editar Dados">
+                            <i data-lucide="pencil" class="w-5 h-5"></i>
+                        </button>
+                    </h1>
+                    <p class="text-gray-600">Setor: <span id="setor-paciente">...</span> | Cargo: <span
+                            id="cargo-paciente">...</span></p>
                 </div>
-                <a href="/consultar-paciente"
-                    class="text-slate-500 hover:text-azulEscuro flex items-center gap-2 transition-colors">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar à Busca
-                </a>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
-
-                <div class="xl:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
-                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-azulEscuro">
-                            <i data-lucide="user"></i>
-                        </div>
-                        <div>
-                            <h2 id="info-nome" class="font-bold text-slate-800">Carregando...</h2>
-                            <p id="info-matricula" class="text-xs text-slate-400">Matrícula: --</p>
-                        </div>
-                    </div>
-                    <div class="space-y-3 text-sm">
-                        <div><span class="text-slate-400 block text-xs">Cargo</span> <span id="info-cargo"
-                                class="font-medium text-slate-700">--</span></div>
-                        <div><span class="text-slate-400 block text-xs">Setor</span> <span id="info-setor"
-                                class="font-medium text-slate-700">--</span></div>
-                        <div><span class="text-slate-400 block text-xs">Supervisor</span> <span id="info-supervisor"
-                                class="font-medium text-slate-700">--</span></div>
-                    </div>
-                </div>
-
-                <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
-                        <i data-lucide="stethoscope" class="w-5 h-5 text-azulEscuro"></i> Registro de Triagem
-                    </h3>
-
-                    <form id="formTriagem" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">Pressão Arterial</label>
-                                <input type="text" id="pressao" placeholder="Ex: 120/80"
-                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">Temperatura (°C)</label>
-                                <input type="number" step="0.1" id="temperatura" placeholder="Ex: 36.5"
-                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">Queixa Principal
-                                (Sintomas)</label>
-                            <textarea id="queixa" rows="3" required
-                                class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none"></textarea>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">Gravidade</label>
-                                <select id="gravidade"
-                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none">
-                                    <option value="Baixa">🟢 Baixa (Rotina)</option>
-                                    <option value="Média">🟡 Média (Atenção)</option>
-                                    <option value="Alta">🔴 Alta (Urgência)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">Ação Tomada</label>
-                                <select id="acao"
-                                    class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none">
-                                    <option value="Medicação Local">Medicação Local</option>
-                                    <option value="Repouso">Repouso</option>
-                                    <option value="Encaminhamento Hospitalar">Encaminhamento Hospitalar</option>
-                                    <option value="Retorno ao Trabalho">Retorno ao Trabalho</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button type="submit"
-                            class="w-full bg-azulEscuro hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow-md transition-all flex justify-center items-center gap-2 mt-2">
-                            <i data-lucide="save" class="w-5 h-5"></i> Salvar Triagem
-                        </button>
-                    </form>
-                </div>
-
-                <div class="xl:col-span-1 space-y-6">
-                    <div class="bg-red-50 p-6 rounded-2xl shadow-sm border border-red-100 h-fit">
-                        <h3 class="font-bold text-vermelhoAlerta mb-4 flex items-center gap-2">
-                            <i data-lucide="shield-alert" class="w-5 h-5"></i> Alergias
-                        </h3>
-                        <ul id="lista-alergias" class="space-y-2 text-sm text-red-900 mb-4">
-                            <li class="flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Nenhuma
-                                registrada.</li>
-                        </ul>
-                        <button onclick="abrirModal()"
-                            class="w-full bg-white text-vermelhoAlerta border border-red-200 hover:bg-red-100 py-2 rounded-lg text-sm font-bold transition-all">
-                            + Adicionar Alergia
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-            <div id="modal-backdrop"
-                class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-
-                <div id="modalAlergia"
-                    class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
-                    <div class="bg-azulEscuro p-4 text-white flex justify-between items-center">
-                        <h3 class="font-bold flex items-center gap-2">
-                            <i data-lucide="shield-alert" class="w-5 h-5"></i> Registrar Alergia Permanentemente
-                        </h3>
-                        <button type="button" onclick="fecharModal()"
-                            class="hover:bg-blue-800 p-1 rounded-lg transition-colors">
-                            <i data-lucide="x" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-
-                    <form id="formAlergia" class="p-6 space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">Descrição da Alergia /
-                                Substância</label>
-                            <input type="text" id="descricao_alergia" required
-                                placeholder="Ex: Dipirona, Penicilina, Látex"
-                                class="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-azulEscuro outline-none transition-all">
-                        </div>
-
-                        <button type="submit"
-                            class="w-full bg-vermelhoAlerta hover:bg-red-800 text-white font-bold py-2.5 rounded-lg shadow-md transition-all flex justify-center items-center gap-2">
-                            <i data-lucide="plus-circle" class="w-5 h-5"></i> Adicionar à Ficha
-                        </button>
-                    </form>
-                </div>
-
-            </div>
         </main>
 
-        <script>
-            lucide.createIcons();
-            if (!localStorage.getItem('token')) window.location.href = '/';
+        <div id="modal-editar-paciente"
+            class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-azulEscuro flex items-center gap-2">
+                        <i data-lucide="user-cog" class="w-6 h-6"></i> Editar Paciente
+                    </h2>
+                    <button onclick="fecharModalEditar()" class="text-gray-400 hover:text-red-500">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <form id="form-editar-paciente" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700">Nome Completo</label>
+                        <input type="text" id="edit-nome" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                            required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700">Setor</label>
+                            <input type="text" id="edit-setor" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700">Cargo</label>
+                            <input type="text" id="edit-cargo" class="w-full px-4 py-2 border rounded-xl bg-gray-50"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-azulEscuro text-white font-bold py-3 rounded-xl mt-4">
+                        Guardar Alterações
+                    </button>
+                </form>
+            </div>
+        </div>
 
-            function fazerLogout() {
-                localStorage.removeItem('token'); window.location.href = '/';
-            }
-        </script>
         <script src="/js/ficha-paciente.js"></script>
 </body>
 
