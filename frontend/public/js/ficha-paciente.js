@@ -1,4 +1,5 @@
-// CONTROLE DO MODAL DE ALERGIA
+const BASE_URL = "https://nexa-logos.onrender.com";
+
 function abrirModalAlergia() {
     document.getElementById('modal-backdrop').classList.remove('hidden');
     document.getElementById('modal-backdrop').classList.add('flex');
@@ -10,7 +11,6 @@ function fecharModalAlergia() {
     document.getElementById('descricao_alergia').value = '';
 }
 
-// 1. CARREGAR OS DADOS QUANDO A PÁGINA ABRE
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const matricula = params.get('matricula');
@@ -24,21 +24,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
 
     try {
-        // Busca info do paciente
-        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+        const resposta = await fetch(`${BASE_URL}/funcionarios/${matricula}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (resposta.ok) {
             const paciente = await resposta.json();
 
-            // Pinta as informações no cabeçalho
             document.getElementById('info-nome').textContent = paciente.nome || 'Não informado';
             document.getElementById('info-matricula').textContent = `Matrícula: ${paciente.matricula}`;
             document.getElementById('info-cargo').textContent = paciente.cargo || 'Não informado';
             document.getElementById('info-setor').textContent = paciente.setor || 'Não informado';
 
-            // Chama as alergias
             carregarAlergias(matricula, token);
         } else {
             alert("Erro ao buscar dados do paciente.");
@@ -50,10 +47,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 2. LÓGICA DAS ALERGIAS
 async function carregarAlergias(matricula, token) {
     try {
-        const resposta = await fetch(`http://localhost:3000/alergias?funcionario_matricula=${matricula}`, {
+        const resposta = await fetch(`${BASE_URL}/alergias?funcionario_matricula=${matricula}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -98,7 +94,7 @@ document.getElementById('formAlergia').addEventListener('submit', async (e) => {
     const descricao = document.getElementById('descricao_alergia').value;
 
     try {
-        const resposta = await fetch('http://localhost:3000/alergias', {
+        const resposta = await fetch(`${BASE_URL}/alergias`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({ funcionario_matricula: matricula, descricao_alergia: descricao })
@@ -122,7 +118,7 @@ window.excluirAlergia = async function (idAlergia) {
     const matricula = params.get('matricula');
 
     try {
-        const resposta = await fetch(`http://localhost:3000/alergias/${idAlergia}`, {
+        const resposta = await fetch(`${BASE_URL}/alergias/${idAlergia}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -137,7 +133,6 @@ window.excluirAlergia = async function (idAlergia) {
     }
 }
 
-// 3. LÓGICA DE SALVAR O ATENDIMENTO / TRIAGEM
 document.getElementById('formTriagem').addEventListener('submit', async (e) => {
     e.preventDefault();
     const params = new URLSearchParams(window.location.search);
@@ -152,7 +147,7 @@ document.getElementById('formTriagem').addEventListener('submit', async (e) => {
     };
 
     try {
-        const resposta = await fetch('http://localhost:3000/atendimentos', {
+        const resposta = await fetch(`${BASE_URL}/atendimentos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

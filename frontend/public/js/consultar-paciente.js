@@ -1,3 +1,5 @@
+const BASE_URL = "https://nexa-logos.onrender.com";
+
 document.getElementById('formBusca').addEventListener('submit', async (e) => {
     e.preventDefault();
     buscarDados();
@@ -12,7 +14,7 @@ async function buscarDados() {
 
     try {
         const token = localStorage.getItem('token');
-        const url = termo ? `http://localhost:3000/funcionarios?busca=${termo}` : `http://localhost:3000/funcionarios`;
+        const url = termo ? `${BASE_URL}/funcionarios?busca=${termo}` : `${BASE_URL}/funcionarios`;
 
         const resposta = await fetch(url, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -31,7 +33,6 @@ async function buscarDados() {
             return;
         }
 
-        // Tabela com botões divididos (Clínico vs Admin)
         tabela.innerHTML = dados.map(paciente => `
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="py-4 px-6 font-medium text-slate-700">${paciente.matricula}</td>
@@ -69,20 +70,19 @@ async function buscarDados() {
     }
 }
 
-// LÓGICA DE EXCLUSÃO
 async function deletarPaciente(matricula) {
     if (!confirm(`Atenção: Tem certeza que deseja remover o funcionário da matrícula ${matricula}?\nTodos os registros dele serão perdidos.`)) return;
 
     const token = localStorage.getItem('token');
     try {
-        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+        const resposta = await fetch(`${BASE_URL}/funcionarios/${matricula}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (resposta.ok) {
             alert("Funcionário excluído com sucesso!");
-            buscarDados(); // Recarrega a tabela
+            buscarDados();
         } else {
             alert("Erro ao excluir o funcionário.");
         }
@@ -92,7 +92,6 @@ async function deletarPaciente(matricula) {
     }
 }
 
-// LÓGICA DE EDIÇÃO
 function abrirModalEditar(matricula, nome, setor, cargo) {
     const modal = document.getElementById('modal-editar-paciente');
     modal.classList.remove('hidden');
@@ -122,7 +121,7 @@ document.getElementById('form-editar-paciente').addEventListener('submit', async
     };
 
     try {
-        const resposta = await fetch(`http://localhost:3000/funcionarios/${matricula}`, {
+        const resposta = await fetch(`${BASE_URL}/funcionarios/${matricula}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +132,7 @@ document.getElementById('form-editar-paciente').addEventListener('submit', async
 
         if (resposta.ok) {
             fecharModalEditar();
-            buscarDados(); // Recarrega a tabela para ver a alteração
+            buscarDados();
         } else {
             alert('Erro ao atualizar dados.');
         }
