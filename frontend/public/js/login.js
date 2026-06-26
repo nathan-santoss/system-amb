@@ -26,8 +26,3 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         alert('Erro ao conectar com o servidor. Verifique se o Back-end está rodando.');
     }
 });
-
-function fazerLogout() {
-    localStorage.removeItem('token')
-    window.location.href = '/login'
-}
