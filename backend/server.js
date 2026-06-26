@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { spawn } from 'child_process';
 import database from './src/config/database.js';
 
 // Importação dos Modelos
@@ -46,6 +47,18 @@ async function iniciarServidor() {
 
             app.listen(3000, () => {
                 console.log("Servidor Back-end rodando na porta 3000");
+
+                console.log("Iniciando o servidor do Frontend...");
+                // O 'shell: true' é importante para que o npm seja encontrado em diferentes ambientes
+                // e para que o comando funcione corretamente.
+                const frontendProcess = spawn('npm', ['start', '--prefix', 'frontend'], {
+                    stdio: 'inherit', // Redireciona a saída (stdout, stderr) para o processo pai
+                    shell: true
+                });
+
+                frontendProcess.on('close', (code) => {
+                    console.log(`Processo do frontend foi encerrado com código ${code}`);
+                });
             });
             break;
         } catch (erro) {

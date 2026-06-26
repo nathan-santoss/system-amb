@@ -4,9 +4,9 @@
   "private": true,
   "description": "Gerenciador para iniciar backend e frontend simultaneamente.",
   "scripts": {
-    "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+    "start": "npm start --prefix backend",
+    "postinstall": "npm install --prefix backend && npm install --prefix frontend"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
   }
 }
