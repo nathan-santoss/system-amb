@@ -12,7 +12,7 @@ async function criarUsuarioMaster() {
         if (!usuarioExiste) {
             console.log("⏳ Criando usuário master padrão para testes...")
 
-            const funcionarioExiste = await Funcionario.findByPk('admin123')
+            const funcionarioExiste = await Funcionario.findByPk(matricula)
             if (!funcionarioExiste) {
                 await Funcionario.create({
                     matricula: matricula,

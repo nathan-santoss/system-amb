@@ -32,7 +32,7 @@ app.use(funcionarioRoutes);
 app.use(atendimentoRoutes);
 app.use(alergiaRoutes);
 app.use(atestadoRoutes);
-app.use(authRoutes);
+app.use('/api/auth', authRoutes);
 
 // Rota Inicial (devolve um JSON)
 app.get('/', (req, res) => {
