@@ -1,0 +1,35 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<%-- Define o título da página que aparece na aba do navegador. --%>
+<title>Ambulatório | Nexa Logos</title>
+
+<%-- Inclui a biblioteca Tailwind CSS via CDN, permitindo o uso de suas classes utilitárias para estilização. --%>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<%-- Inclui a biblioteca Lucide Icons via CDN, que fornece um conjunto de ícones vetoriais. --%>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<%-- Linka o arquivo de estilos CSS global da aplicação, que contém estilos personalizados. --%>
+<link rel="stylesheet" href="/css/global.css">
+
+<script>
+    // Configuração personalizada do Tailwind CSS.
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    // Definição de cores personalizadas para uso no Tailwind CSS.
+                    azulEscuro: '#004A8F',
+                    vermelhoAlerta: '#D32F2F',
+                    cinzaFundo: '#F4F7F6',
+                    cinzaTexto: '#334155'
+                },
+                fontFamily: {
+                    // Definição de uma fonte personalizada (Inter) para a família de fontes 'sans-serif'.
+                    sans: ['Inter', 'sans-serif'],
+                }
+            }
+        }
+    }
+</script>
