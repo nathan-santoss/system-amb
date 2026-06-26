@@ -2,16 +2,17 @@ import express from 'express'
 
 import {
     cadastrarFuncionario,
-    buscarFuncionarios,
+    buscarPacientes,
     atualizarFuncionario,
-    deletarFuncionario
+    deletarFuncionario,
+    buscarFuncionarioPorMatricula
 } from '../controllers/funcionarioController.js'
 import { verificarToken } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
 router.post(`/funcionarios`, verificarToken, cadastrarFuncionario)
-router.get(`/funcionarios`, verificarToken, buscarFuncionarios)
+router.get(`/funcionarios`, verificarToken, buscarPacientes)
 
 router.put(`/funcionarios/:matricula`, verificarToken, atualizarFuncionario)
 router.patch(`/funcionarios/:matricula`, verificarToken, atualizarFuncionario)

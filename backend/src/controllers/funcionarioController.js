@@ -14,7 +14,7 @@ export async function cadastrarFuncionario(req, res) {
 }
 
 // buscar funcionários (com ou sem filtro de pesquisa)
-async function buscarPacientes() {
+export async function buscarPacientes() {
     setCarregando(true);
     setErro('');
 

@@ -2,9 +2,9 @@ import bcrypt from 'bcryptjs'
 import Funcionario from '../models/funcionarios.js'
 import Usuario from '../models/usuarios.js'
 
-export async function criarUsuarioMaster() {
+async function criarUsuarioMaster() {
     try {
-        const usuarioExiste = await Usuario.findOne({ where: { matricula: 'admin123' } })
+        const usuarioExiste = await Usuario.findOne({ where: { id: 1 } })
 
         if (!usuarioExiste) {
             console.log("⏳ Criando usuário master padrão para testes...")
@@ -13,9 +13,9 @@ export async function criarUsuarioMaster() {
             if (!funcionarioExiste) {
                 await Funcionario.create({
                     matricula: 'admin123',
-                    nome: 'Professor / Avaliador',
-                    cpf: '000.000.000-00',
-                    cargo: 'Enfermeiro Chefe',
+                    nome: 'Avaliador',
+                    cpf: '00000000000',
+                    cargo: 'Chefe',
                     setor: 'Administração'
                 })
             }
@@ -24,7 +24,8 @@ export async function criarUsuarioMaster() {
             const senhaHash = await bcrypt.hash('senha123', salt)
 
             await Usuario.create({
-                matricula: 'admin123',
+                id: 1,
+                email: 'admin123@12345',
                 senha: senhaHash
             })
 
@@ -36,3 +37,5 @@ export async function criarUsuarioMaster() {
         console.error("Falha crítica ao inicializar usuário master:", error)
     }
 }
+
+export default criarUsuarioMaster

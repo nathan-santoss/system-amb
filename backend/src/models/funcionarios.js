@@ -9,20 +9,20 @@ const Funcionario = database.define("Funcionario", {
     },
     nome: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     cpf: {
       type: DataTypes.STRING(11),
       unique: true,
-      allowNull: false,
+      allowNull: true,
     },
     cargo: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     setor: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     nucleo: {
       type: DataTypes.STRING(40),
@@ -42,7 +42,7 @@ const Funcionario = database.define("Funcionario", {
     }
   }, {
     tableName: "tb_funcionarios",
-    timestamps: true,
+    timestamps: false,
     createdAt: "criado_em",
     updatedAt: "atualizado_em",
   }
